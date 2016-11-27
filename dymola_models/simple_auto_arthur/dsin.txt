@@ -1,0 +1,368 @@
+#1
+char Aclass(3,24)
+Adymosim
+1.4
+Modelica experiment file
+
+
+#    Experiment parameters
+double experiment(7,1)
+       0                   # StartTime    Time at which integration starts
+                           #              (and linearization and trimming time)
+      10                   # StopTime     Time at which integration stops
+       0                   # Increment    Communication step size, if > 0
+    5000                   # nInterval    Number of communication intervals, if > 0
+  1.000000000000000E-004   # Tolerance    Relative precision of signals for
+                           #              simulation, linearization and trimming
+       0                   # MaxFixedStep Maximum step size of fixed step size
+                           #              integrators, if > 0.0
+       8                   # Algorithm    Integration algorithm as integer (1...14)
+                           #
+                           #             | model|       |        | dense | state |
+                           # Algorithm   | typ  | stiff | order  | output| event |
+                           # ------------+------+-------+--------+-------+-------+
+                           #  1 | deabm  |  ode |   no  |  1-12  |  yes  |   no  |
+                           #  2 | lsode1 |  ode |   no  |  1-12  |  yes  |   no  |
+                           #  3 | lsode2 |  ode |  yes  |  1-5   |  yes  |   no  |
+                           #  4 | lsodar |  ode |  both |1-12,1-5|  yes  |  yes  |
+                           #  5 | dopri5 |  ode |   no  |   5    |   no  |   no  |
+                           #  6 | dopri8 |  ode |   no  |   8    |   no  |   no  |
+                           #  7 | grk4t  |  ode |  yes  |   4    |   no  |   no  |
+                           #  8 | dassl  |  dae |  yes  |  1-5   |  yes  |  yes  |
+                           #  9 | odassl | hdae |  yes  |  1-5   |  yes  |  yes  |
+                           # 10 | mexx   | hdae |   no  |  2-24  |   no  |   no  |
+                           # 11 | euler  |  ode |   no  |   1    |   no  |  yes  |
+                           # 12 | rkfix2 |  ode |   no  |   2    |   no  |  yes  |
+                           # 13 | rkfix3 |  ode |   no  |   3    |   no  |  yes  |
+                           # 14 | rkfix4 |  ode |   no  |   4    |   no  |  yes  |
+                           # ---+--------+------+-------+--------+-------+-------+
+                           # euler and rkfix have fixed stepsize.
+
+
+#    Method tuning parameters
+double method(27,1)
+       1                   # grid     type of communication time grid, defined by
+                           #          = 1: equidistant points ("Increment/nInterval")
+                           #          = 2: vector of grid points ("tgrid")
+                           #          = 3: variable step integrator (automatically)
+                           #          = 4: model (call of "increment" in Dymola, e.g.
+                           #                      incr=Time > 2 then 0 else 0.1
+                           #                      dummy=increment(incr))
+                           #          = 5: hardware clock (functions "udstimerXXX")
+                           #          grid = 1,3 is stopped by "StopTime"
+                           #          grid = 2   is stopped by "tgrid(last)"
+                           #          grid = 4   runs forever (stopped by model)
+                           #          grid = 5   runs forever (stopped by udstimerRun)
+       1                   # nt       Use every NT time instant, if grid = 3
+       3                   # dense    1/2/3 restart/step/interpolate GRID points
+       1                   # evgrid   0/1 do not/save event points in comm. time grid
+       1                   # evu      0/1 U-discontinuity does not/trigger events
+       0                   # evuord       U-discontinuity order to consider (0,1,...)
+       0                   # error    0/1/2 One message/warning/error messages
+       0                   # jac      0/1 Compute jacobian numerically/by BLOCKJ
+       0                   # xd0c     0/1 Compute/set XD0
+       0                   # f3       0/1 Ignore/use F3 of HDAE (= index 1)
+       0                   # f4       0/1 Ignore/use F4 of HDAE (= index 2)
+       0                   # f5       0/1 Ignore/use F5 of HDAE (= invar.)
+       0                   # debug    0/1 do not/print debug information
+     100                   # pdebug       priority of debug information (1...100)
+       0                   # fmax     Maximum number of evaluations of BLOCKF, if > 0
+       0                   # ordmax   Maximum allowed integration order, if > 0
+       0                   # hmax     Maximum absolute stepsize, if > 0
+       0                   # hmin     Minimum absolute stepsize, if > 0 (use with care!)
+       0                   # h0       Stepsize to be attempted on first step, if > 0
+  1.000000000000000E-014   # teps     Bound to check, if 2 equal time instants
+  1.000000000000000E-010   # eveps    Hysteresis epsilon at event points
+      20                   # eviter   Maximum number of event iterations
+  1.000000000000000E-006   # delaym   Minimum time increment in delay buffers
+       1                   # fexcep   0/1 floating exception crashes/stops dymosim
+       1                   # tscale   clock-time = tscale*simulation-time, if grid = 5
+                           #          > 1: simulation too slow
+                           #          = 1: simulation-time = real-time
+                           #          < 1: simulation too fast
+       1                   # shared   type of process communication, if grid = 5
+                           #          = 0: no communication,(single process without clock)
+                           #          = 1: no communication (single process with clock)
+                           #          = 2: shared memory (multiple processes with clock)
+    2473                   # memkey   key to be used for shared memory, if shared = 2
+
+
+#    Output parameters
+int settings(13,1)
+ 0                         # lprec    0/1 do not/store result data in double
+ 1                         # lx       0/1 do not/store x  (state variables)
+ 1                         # lxd      0/1 do not/store xd (derivative of states)
+ 0                         # lu       0/1 do not/store u  (input     signals)
+ 1                         # ly       0/1 do not/store y  (output    signals)
+ 0                         # lz       0/1 do not/store z  (indicator signals)
+ 1                         # lw       0/1 do not/store w  (auxiliary signals)
+ 1                         # la       0/1 do not/store a  (alias     signals)
+ 0                         # lperf    0/1 do not/store performance indicators
+ 0                         # levent   0/1 do not/store event point
+ 1                         # lres     0/1 do not/store results on result file
+ 0                         # lshare   0/1 do not/store info data for shared memory on dsshare.txt
+ 1                         # lform    0/1 ASCII/Matlab-binary storage format of results
+                           #              (for simulation/linearization; not for trimming)
+
+
+#    Names of initial variables
+char initialName(128,32)
+G1.G.TgenOff
+G1.G.dTgenOff
+G1.G.Pg
+G1.G.Qg
+G1.G.Ut
+G1.G.Xd
+G1.G.Xq
+G1.G.Xs
+G1.G.X1d
+G1.G.X2d
+G1.G.X2q
+G1.G.Rf
+G1.G.R1d
+G1.G.R1q
+G1.G.Tj
+G1.G.Xt
+G1.G.Sigma
+G1.G.TauC
+G1.G.Mt_max
+G1.G.Mt_min
+G1.AVR.K0u
+G1.AVR.K1u
+G1.AVR.K0w
+G1.AVR.K1w
+G1.AVR.K1if
+G1.AVR.DL0
+G1.AVR.Tokp
+G1.AVR.FrequencyBlockD.b[1]
+G1.AVR.FrequencyBlockU.b[1]
+G1.AVR.FrequencyBlockU.b[2]
+G1.AVR.SimpleExciter.b[1]
+L0102.Rline
+L0102.Xline
+L0102.Bline
+L0102.TLineOff
+L0102.dTLineOff
+L0102.Koff
+SM2.G.TgenOff
+SM2.G.dTgenOff
+SM2.G.Pg
+SM2.G.Qg
+SM2.G.Ut
+SM2.G.Xd
+SM2.G.Xq
+SM2.G.Xs
+SM2.G.X1d
+SM2.G.X2d
+SM2.G.X2q
+SM2.G.Rf
+SM2.G.R1d
+SM2.G.R1q
+SM2.G.Tj
+SM2.G.Xt
+SM2.G.Sigma
+SM2.G.TauC
+SM2.G.Mt_max
+SM2.G.Mt_min
+SM2.AVR.K0u
+SM2.AVR.K1u
+SM2.AVR.K0w
+SM2.AVR.K1w
+SM2.AVR.K1if
+SM2.AVR.DL0
+SM2.AVR.Tokp
+SM2.AVR.FrequencyBlockD.b[1]
+SM2.AVR.FrequencyBlockU.b[1]
+SM2.AVR.FrequencyBlockU.b[2]
+SM2.AVR.SimpleExciter.b[1]
+KZ1.Bn
+KZ1.TkzOn
+KZ1.dTkzOn
+KZ2.Bn
+KZ2.TkzOn
+KZ2.dTkzOn
+G1.G.Mu
+G1.G.Yr
+G1.G.Yrd
+G1.G.Yrq
+G1.G.s
+G1.AVR.VoltageDeviation.x[1]
+G1.AVR.VoltageDerivative.x[1]
+G1.AVR.FrequencyBlockD.x[1]
+G1.AVR.FrequencyBlockU.x[1]
+G1.AVR.FrequencyDeviation.x[1]
+G1.AVR.FrequencyDerivative.x[1]
+G1.AVR.ExcitationCurrent.x[1]
+G1.AVR.SimpleExciter.x[1]
+SM2.G.Mu
+SM2.G.Yr
+SM2.G.Yrd
+SM2.G.Yrq
+SM2.G.s
+SM2.AVR.VoltageDeviation.x[1]
+SM2.AVR.VoltageDerivative.x[1]
+SM2.AVR.FrequencyBlockD.x[1]
+SM2.AVR.FrequencyBlockU.x[1]
+SM2.AVR.FrequencyDeviation.x[1]
+SM2.AVR.FrequencyDerivative.x[1]
+SM2.AVR.ExcitationCurrent.x[1]
+SM2.AVR.SimpleExciter.x[1]
+delta_G1_SM2
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+double initialValue(128,6)
+ -1    1000                  0  0  1  0   # G1.G.TgenOff
+ -1      10                  0  0  1  0   # G1.G.dTgenOff
+ -1  8.500000000000000E-001  0  0  1  0   # G1.G.Pg
+ -1  4.000000000000000E-002  0  0  1  0   # G1.G.Qg
+ -1       1                  0  0  1  0   # G1.G.Ut
+ -1  1.980000000000000E+000  0  0  1  0   # G1.G.Xd
+ -1  9.900000000000000E-001  0  0  1  0   # G1.G.Xq
+ -1  1.440000000000000E-001  0  0  1  0   # G1.G.Xs
+ -1  3.250000000000000E-001  0  0  1  0   # G1.G.X1d
+ -1  1.800000000000000E-001  0  0  1  0   # G1.G.X2d
+ -1  1.980000000000000E-001  0  0  1  0   # G1.G.X2q
+ -1  1.610000000000000E-003  0  0  1  0   # G1.G.Rf
+ -1  1.990000000000000E-002  0  0  1  0   # G1.G.R1d
+ -1  9.129999999999999E-003  0  0  1  0   # G1.G.R1q
+ -1  1.220000000000000E+001  0  0  1  0   # G1.G.Tj
+ -1       0                  0  0  1  0   # G1.G.Xt
+ -1  4.750000000000000E-002  0  0  1  0   # G1.G.Sigma
+ -1  8.000000000000000E-001  0  0  1  0   # G1.G.TauC
+ -1       1                  0  0  1  0   # G1.G.Mt_max
+ -1       0                  0  0  1  0   # G1.G.Mt_min
+ -1     -10                  0  0  1  0   # G1.AVR.K0u
+ -1       0                  0  0  1  0   # G1.AVR.K1u
+ -1       0                  0  0  1  0   # G1.AVR.K0w
+ -1       0                  0  0  1  0   # G1.AVR.K1w
+ -1       0                  0  0  1  0   # G1.AVR.K1if
+ -1       0                  0  0  1  0   # G1.AVR.DL0
+ -1  5.000000000000000E-002  0  0  1  0   # G1.AVR.Tokp
+ -1       1                  0  0  1  0   # G1.AVR.FrequencyBlockD.b[1]
+ -1       1                  0  0  1  0   # G1.AVR.FrequencyBlockU.b[1]
+ -1       0                  0  0  1  0   # G1.AVR.FrequencyBlockU.b[2]
+ -1       1                  0  0  1  0   # G1.AVR.SimpleExciter.b[1]
+ -1  1.000000000000000E-002  0  0  1  0   # L0102.Rline
+ -1  1.000000000000000E-001  0  0  1  0   # L0102.Xline
+ -1       0                  0  0  1  0   # L0102.Bline
+ -1    1000                  0  0  1  0   # L0102.TLineOff
+ -1      10                  0  0  1  0   # L0102.dTLineOff
+ -1  100000                  0  0  1  0   # L0102.Koff
+ -1    1000                  0  0  1  0   # SM2.G.TgenOff
+ -1      10                  0  0  1  0   # SM2.G.dTgenOff
+ -1 -8.500000000000000E-001  0  0  1  0   # SM2.G.Pg
+ -1  3.000000000000000E-002  0  0  1  0   # SM2.G.Qg
+ -1       1                  0  0  1  0   # SM2.G.Ut
+ -1  3.223000000000000E+000  0  0  1  0   # SM2.G.Xd
+ -1  2.089000000000000E+000  0  0  1  0   # SM2.G.Xq
+ -1  2.570000000000000E-001  0  0  1  0   # SM2.G.Xs
+ -1  8.290000000000000E-001  0  0  1  0   # SM2.G.X1d
+ -1  4.850000000000000E-001  0  0  1  0   # SM2.G.X2d
+ -1  4.570000000000000E-001  0  0  1  0   # SM2.G.X2q
+ -1  1.780000000000000E-003  0  0  1  0   # SM2.G.Rf
+ -1  1.270000000000000E-002  0  0  1  0   # SM2.G.R1d
+ -1  8.710000000000001E-003  0  0  1  0   # SM2.G.R1q
+ -1  2.450000000000000E+000  0  0  1  0   # SM2.G.Tj
+ -1       0                  0  0  1  0   # SM2.G.Xt
+ -1  4.750000000000000E-002  0  0  1  0   # SM2.G.Sigma
+ -1   99999                  0  0  1  0   # SM2.G.TauC
+ -1 -8.000000000000000E-001  0  0  1  0   # SM2.G.Mt_max
+ -1 -9.000000000000000E-001  0  0  1  0   # SM2.G.Mt_min
+ -1     -10                  0  0  1  0   # SM2.AVR.K0u
+ -1       0                  0  0  1  0   # SM2.AVR.K1u
+ -1       0                  0  0  1  0   # SM2.AVR.K0w
+ -1       0                  0  0  1  0   # SM2.AVR.K1w
+ -1       0                  0  0  1  0   # SM2.AVR.K1if
+ -1       0                  0  0  1  0   # SM2.AVR.DL0
+ -1  5.000000000000000E-002  0  0  1  0   # SM2.AVR.Tokp
+ -1       1                  0  0  1  0   # SM2.AVR.FrequencyBlockD.b[1]
+ -1       1                  0  0  1  0   # SM2.AVR.FrequencyBlockU.b[1]
+ -1       0                  0  0  1  0   # SM2.AVR.FrequencyBlockU.b[2]
+ -1       1                  0  0  1  0   # SM2.AVR.SimpleExciter.b[1]
+ -1 -100000                  0  0  1  0   # KZ1.Bn
+ -1    1000                  0  0  1  0   # KZ1.TkzOn
+ -1  1.200000000000000E-001  0  0  1  0   # KZ1.dTkzOn
+ -1 -100000                  0  0  1  0   # KZ2.Bn
+ -1    1000                  0  0  1  0   # KZ2.TkzOn
+ -1  1.200000000000000E-001  0  0  1  0   # KZ2.dTkzOn
+ -1  8.573181629180908E-001  0  0  2  0   # G1.G.Mu
+ -1  1.056349396705627E+000  0  0  2  0   # G1.G.Yr
+ -1  8.508638739585877E-001  0  0  2  0   # G1.G.Yrd
+ -1  5.475563406944275E-001  0  0  2  0   # G1.G.Yrq
+ -1 -3.470465890131891E-004  0  0  2  0   # G1.G.s
+ -1  1.914998982101679E-003  0  0  2  0   # G1.AVR.VoltageDeviation.x[1]
+ -1  1.914772437885404E-003  0  0  2  0   # G1.AVR.VoltageDerivative.x[1]
+ -1 -1.090208962559700E-001  0  0  2  0   # G1.AVR.FrequencyBlockD.x[1]
+ -1 -6.938900351524353E-001  0  0  2  0   # G1.AVR.FrequencyBlockU.x[1]
+ -1 -1.094566285610199E-001  0  0  2  0   # G1.AVR.FrequencyDeviation.x[1]
+ -1 -1.091095432639122E-001  0  0  2  0   # G1.AVR.FrequencyDerivative.x[1]
+ -1 -1.024797465652227E-002  0  0  2  0   # G1.AVR.ExcitationCurrent.x[1]
+ -1 -1.914405077695847E-002  0  0  2  0   # G1.AVR.SimpleExciter.x[1]
+ -1 -8.499992489814758E-001  0  0  2  0   # SM2.G.Mu
+ -1  1.428231835365295E+000  0  0  2  0   # SM2.G.Yr
+ -1  7.212109565734863E-001  0  0  2  0   # SM2.G.Yrd
+ -1 -7.403625249862671E-001  0  0  2  0   # SM2.G.Yrq
+ -1 -3.466664347797632E-004  0  0  2  0   # SM2.G.s
+ -1 -4.623137880116701E-003  0  0  2  0   # SM2.AVR.VoltageDeviation.x[1]
+ -1 -4.623749759048224E-003  0  0  2  0   # SM2.AVR.VoltageDerivative.x[1]
+ -1 -1.090208962559700E-001  0  0  2  0   # SM2.AVR.FrequencyBlockD.x[1]
+ -1 -7.797957062721252E-001  0  0  2  0   # SM2.AVR.FrequencyBlockU.x[1]
+ -1 -1.094577386975288E-001  0  0  2  0   # SM2.AVR.FrequencyDeviation.x[1]
+ -1 -1.091075018048286E-001  0  0  2  0   # SM2.AVR.FrequencyDerivative.x[1]
+ -1  1.520933210849762E-002  0  0  2  0   # SM2.AVR.ExcitationCurrent.x[1]
+ -1  4.624750092625618E-002  0  0  2  0   # SM2.AVR.SimpleExciter.x[1]
+ -1  1.792247295379639E+000  0  0  2  0   # delta_G1_SM2
+  0       0                  0  0  3  0   # 
+  0       0                  0  0  3  0   # 
+  0       0                  0  0  3  0   # 
+  0       0                  0  0  3  0   # 
+  0       0                  0  0  3  0   # 
+  0       0                  0  0  3  0   # 
+  0       0                  0  0  3  0   # 
+  0       0                  0  0  3  0   # 
+  0       0                  0  0  3  0   # 
+  0       0                  0  0  3  0   # 
+  0       0                  0  0  3  0   # 
+  0       0                  0  0  3  0   # 
+  0       0                  0  0  3  0   # 
+  0       0                  0  0  3  0   # 
+  0       0                  0  0  3  0   # 
+  0       0                  0  0  3  0   # 
+  0       0                  0  0  3  0   # 
+  0       0                  0  0  3  0   # 
+  0       0                  0  0  3  0   # 
+  0       0                  0  0  3  0   # 
+  0       0                  0  0  3  0   # 
+  0       0                  0  0  3  0   # 
+  0       0                  0  0  3  0   # 
+  0       0                  0  0  3  0   # 
+  0       0                  0  0  3  0   # 
+  0       0                  0  0  3  0   # 
+  0       0                  0  0  3  0   # 
+

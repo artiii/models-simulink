@@ -1,0 +1,967 @@
+Warning: Connect does not refer to connectors in equation
+connect(G1.G.dUtr, G1.AVR.u_u);
+
+Found in class Generator_with_ARV, c:\wp\dymola\work\31_yurganov\06_arthur\qq\simple_auto_ggf_01.mo
+ at line 322, and used in component G1.
+Warning: Connect does not refer to connectors in connect(G1.G.dUtr, G1.AVR.u_pu)
+;
+
+Found in class Generator_with_ARV, c:\wp\dymola\work\31_yurganov\06_arthur\qq\simple_auto_ggf_01.mo
+ at line 323, and used in component G1.
+Warning: Connect does not refer to connectors in connect(G1.G.dWu, G1.AVR.u_fsys
+);
+
+Found in class Generator_with_ARV, c:\wp\dymola\work\31_yurganov\06_arthur\qq\simple_auto_ggf_01.mo
+ at line 324, and used in component G1.
+Warning: Connect does not refer to connectors in connect(G1.G.dWf, G1.AVR.u_fu);
+
+Found in class Generator_with_ARV, c:\wp\dymola\work\31_yurganov\06_arthur\qq\simple_auto_ggf_01.mo
+ at line 325, and used in component G1.
+Warning: Connect does not refer to connectors in connect(G1.G.dIf, G1.AVR.u_pIf)
+;
+
+Found in class Generator_with_ARV, c:\wp\dymola\work\31_yurganov\06_arthur\qq\simple_auto_ggf_01.mo
+ at line 326, and used in component G1.
+Warning: Connect does not refer to connectors in connect(G1.AVR.y_er, G1.G.dEr);
+
+Found in class Generator_with_ARV, c:\wp\dymola\work\31_yurganov\06_arthur\qq\simple_auto_ggf_01.mo
+ at line 328, and used in component G1.
+Warning: Connect does not refer to connectors in connect(SM2.G.dUtr, SM2.AVR.u_u
+);
+
+Found in class Generator_with_ARV, c:\wp\dymola\work\31_yurganov\06_arthur\qq\simple_auto_ggf_01.mo
+ at line 322, and used in component SM2.
+Warning: Connect does not refer to connectors in connect(SM2.G.dUtr, 
+SM2.AVR.u_pu);
+
+Found in class Generator_with_ARV, c:\wp\dymola\work\31_yurganov\06_arthur\qq\simple_auto_ggf_01.mo
+ at line 323, and used in component SM2.
+Warning: Connect does not refer to connectors in connect(SM2.G.dWu, 
+SM2.AVR.u_fsys);
+
+Found in class Generator_with_ARV, c:\wp\dymola\work\31_yurganov\06_arthur\qq\simple_auto_ggf_01.mo
+ at line 324, and used in component SM2.
+Warning: Connect does not refer to connectors in connect(SM2.G.dWf, SM2.AVR.u_fu
+);
+
+Found in class Generator_with_ARV, c:\wp\dymola\work\31_yurganov\06_arthur\qq\simple_auto_ggf_01.mo
+ at line 325, and used in component SM2.
+Warning: Connect does not refer to connectors in connect(SM2.G.dIf, 
+SM2.AVR.u_pIf);
+
+Found in class Generator_with_ARV, c:\wp\dymola\work\31_yurganov\06_arthur\qq\simple_auto_ggf_01.mo
+ at line 326, and used in component SM2.
+Warning: Connect does not refer to connectors in connect(SM2.AVR.y_er, SM2.G.dEr
+);
+
+Found in class Generator_with_ARV, c:\wp\dymola\work\31_yurganov\06_arthur\qq\simple_auto_ggf_01.mo
+ at line 328, and used in component SM2.
+model vankor11
+parameter Real G1.G.TgenOff = 1000;
+parameter Real G1.G.dTgenOff = 10;
+parameter Real G1.G.Pg = (-0.35);
+parameter Real G1.G.Qg = (-0.2);
+parameter Real G1.G.Ut = 1;
+parameter Real G1.G.Xd = 3.223 "Продольное индуктивное сопротивление";
+parameter Real G1.G.Xq = 2.089 "Поперечное индуктивное сопротивление";
+parameter Real G1.G.Xs = 0.257 "Индуктивное сопротивление рассеяния";
+parameter Real G1.G.X1d = 0.829 "Переходное продольное индуктивное сопротивление"
+;
+parameter Real G1.G.X2d = 0.485 "Сверхпереходное продольное индуктивное сопротивление"
+;
+parameter Real G1.G.X2q = 0.457 "Сверхпереходное поперечное индуктивное сопротивление"
+;
+parameter Real G1.G.Rf = 0.00178 "Активное сопротивление обмотки возбуждения";
+parameter Real G1.G.R1d = 0.0127 "Активное сопротивление ДК в продольной оси";
+parameter Real G1.G.R1q = 0.00871 "Активное сопротивление ДК в поперечной оси";
+parameter Real G1.G.Tj = 2.45 "Механическая инерционная постоянная";
+parameter Real G1.G.Xt = 0 "Индуктивное сопротивление трансформатора";
+parameter Real G1.G.Sigma = 0.0475 "Коэффициент статизма регулятора турбины";
+parameter Real G1.G.TauC = 99999 "Постоянная времени сервомотора";
+parameter Real G1.G.Mt_max = 0 "Верхнее ограничение момента турбины";
+parameter Real G1.G.Mt_min = (-0.5) "Нижнее ограничение момента турбины";
+constant Real G1.G.PI = 3.14159265358979;
+constant Real G1.G.Wc = 100*G1.G.PI;
+constant Real G1.G.Ra = 0;
+constant Real G1.G.Rt = 0;
+parameter Real G1.AVR.K0u = (-10);
+parameter Real G1.AVR.K1u = 0;
+parameter Real G1.AVR.K0w = 0;
+parameter Real G1.AVR.K1w = 0;
+parameter Real G1.AVR.K1if = 0;
+parameter Real G1.AVR.DL0 = 0;
+parameter Real G1.AVR.Tokp = 0.05;
+constant Real G1.AVR.T0u = 0.02;
+constant Real G1.AVR.T1u = 0.039;
+constant Real G1.AVR.Tfb = 0.07;
+constant Real G1.AVR.T0w = 1;
+constant Real G1.AVR.T1w = 0.026;
+constant Real G1.AVR.T1if = 0.03;
+parameter Real G1.AVR.VoltageDeviation.b[:] = {G1.AVR.K0u} "Numerator coefficients of transfer function."
+;
+parameter Real G1.AVR.VoltageDeviation.a[:] = {G1.AVR.T0u, 1} "Denominator coefficients of transfer function."
+;
+parameter Integer G1.AVR.VoltageDeviation.na = size(G1.AVR.VoltageDeviation.a, 1
+) "Size of Denominator of transfer function.";
+parameter Integer G1.AVR.VoltageDeviation.nb = size(G1.AVR.VoltageDeviation.b, 1
+) "Size of Numerator of transfer function.";
+parameter Integer G1.AVR.VoltageDeviation.nx = size(G1.AVR.VoltageDeviation.a, 1
+)-1;
+parameter Real G1.AVR.VoltageDerivative.b[:] = {G1.AVR.K1u, 0} "Numerator coefficients of transfer function."
+;
+parameter Real G1.AVR.VoltageDerivative.a[:] = {G1.AVR.T1u, 1} "Denominator coefficients of transfer function."
+;
+parameter Integer G1.AVR.VoltageDerivative.na = size(G1.AVR.VoltageDerivative.a
+, 1) "Size of Denominator of transfer function.";
+parameter Integer G1.AVR.VoltageDerivative.nb = size(G1.AVR.VoltageDerivative.b
+, 1) "Size of Numerator of transfer function.";
+parameter Integer G1.AVR.VoltageDerivative.nx = size(G1.AVR.VoltageDerivative.a
+, 1)-1;
+parameter Real G1.AVR.FrequencyBlockD.b[:] = {1} "Numerator coefficients of transfer function."
+;
+parameter Real G1.AVR.FrequencyBlockD.a[:] = {G1.AVR.Tfb, 1} "Denominator coefficients of transfer function."
+;
+parameter Integer G1.AVR.FrequencyBlockD.na = size(G1.AVR.FrequencyBlockD.a, 1) 
+"Size of Denominator of transfer function.";
+parameter Integer G1.AVR.FrequencyBlockD.nb = size(G1.AVR.FrequencyBlockD.b, 1) 
+"Size of Numerator of transfer function.";
+parameter Integer G1.AVR.FrequencyBlockD.nx = size(G1.AVR.FrequencyBlockD.a, 1)-
+1;
+parameter Real G1.AVR.FrequencyBlockU.b[:] = {1, 0} "Numerator coefficients of transfer function."
+;
+parameter Real G1.AVR.FrequencyBlockU.a[:] = {G1.AVR.Tfb, 1} "Denominator coefficients of transfer function."
+;
+parameter Integer G1.AVR.FrequencyBlockU.na = size(G1.AVR.FrequencyBlockU.a, 1) 
+"Size of Denominator of transfer function.";
+parameter Integer G1.AVR.FrequencyBlockU.nb = size(G1.AVR.FrequencyBlockU.b, 1) 
+"Size of Numerator of transfer function.";
+parameter Integer G1.AVR.FrequencyBlockU.nx = size(G1.AVR.FrequencyBlockU.a, 1)-
+1;
+parameter Real G1.AVR.FrequencyDeviation.b[:] = {G1.AVR.K0w, 0} "Numerator coefficients of transfer function."
+;
+parameter Real G1.AVR.FrequencyDeviation.a[:] = {G1.AVR.T0w, 1} "Denominator coefficients of transfer function."
+;
+parameter Integer G1.AVR.FrequencyDeviation.na = size(G1.AVR.FrequencyDeviation.a
+, 1) "Size of Denominator of transfer function.";
+parameter Integer G1.AVR.FrequencyDeviation.nb = size(G1.AVR.FrequencyDeviation.b
+, 1) "Size of Numerator of transfer function.";
+parameter Integer G1.AVR.FrequencyDeviation.nx = size(G1.AVR.FrequencyDeviation.a
+, 1)-1;
+parameter Real G1.AVR.FrequencyDerivative.b[:] = {G1.AVR.K1w, 0} 
+"Numerator coefficients of transfer function.";
+parameter Real G1.AVR.FrequencyDerivative.a[:] = {G1.AVR.T1w, 1} 
+"Denominator coefficients of transfer function.";
+parameter Integer G1.AVR.FrequencyDerivative.na = size(G1.AVR.FrequencyDerivative.a
+, 1) "Size of Denominator of transfer function.";
+parameter Integer G1.AVR.FrequencyDerivative.nb = size(G1.AVR.FrequencyDerivative.b
+, 1) "Size of Numerator of transfer function.";
+parameter Integer G1.AVR.FrequencyDerivative.nx = size(G1.AVR.FrequencyDerivative.a
+, 1)-1;
+parameter Real G1.AVR.ExcitationCurrent.b[:] = {G1.AVR.K1if, 0} "Numerator coefficients of transfer function."
+;
+parameter Real G1.AVR.ExcitationCurrent.a[:] = {G1.AVR.T1if, 1} "Denominator coefficients of transfer function."
+;
+parameter Integer G1.AVR.ExcitationCurrent.na = size(G1.AVR.ExcitationCurrent.a
+, 1) "Size of Denominator of transfer function.";
+parameter Integer G1.AVR.ExcitationCurrent.nb = size(G1.AVR.ExcitationCurrent.b
+, 1) "Size of Numerator of transfer function.";
+parameter Integer G1.AVR.ExcitationCurrent.nx = size(G1.AVR.ExcitationCurrent.a
+, 1)-1;
+parameter Real G1.AVR.SimpleExciter.b[:] = {1} "Numerator coefficients of transfer function."
+;
+parameter Real G1.AVR.SimpleExciter.a[:] = {G1.AVR.Tokp, 1} "Denominator coefficients of transfer function."
+;
+parameter Integer G1.AVR.SimpleExciter.na = size(G1.AVR.SimpleExciter.a, 1) 
+"Size of Denominator of transfer function.";
+parameter Integer G1.AVR.SimpleExciter.nb = size(G1.AVR.SimpleExciter.b, 1) 
+"Size of Numerator of transfer function.";
+parameter Integer G1.AVR.SimpleExciter.nx = size(G1.AVR.SimpleExciter.a, 1)-1;
+parameter Real L0102.Rline = 0.01;
+parameter Real L0102.Xline = 0.1;
+parameter Real L0102.Bline = 0;
+parameter Real L0102.TLineOff = 1000;
+parameter Real L0102.dTLineOff = 10;
+parameter Real L0102.Koff = 100000;
+parameter Real SM2.G.TgenOff = 1000;
+parameter Real SM2.G.dTgenOff = 10;
+parameter Real SM2.G.Pg = (-0.35);
+parameter Real SM2.G.Qg = (-0.2);
+parameter Real SM2.G.Ut = 1;
+parameter Real SM2.G.Xd = 3.223 "Продольное индуктивное сопротивление";
+parameter Real SM2.G.Xq = 2.089 "Поперечное индуктивное сопротивление";
+parameter Real SM2.G.Xs = 0.257 "Индуктивное сопротивление рассеяния";
+parameter Real SM2.G.X1d = 0.829 "Переходное продольное индуктивное сопротивление"
+;
+parameter Real SM2.G.X2d = 0.485 "Сверхпереходное продольное индуктивное сопротивление"
+;
+parameter Real SM2.G.X2q = 0.457 "Сверхпереходное поперечное индуктивное сопротивление"
+;
+parameter Real SM2.G.Rf = 0.00178 "Активное сопротивление обмотки возбуждения";
+parameter Real SM2.G.R1d = 0.0127 "Активное сопротивление ДК в продольной оси";
+parameter Real SM2.G.R1q = 0.00871 "Активное сопротивление ДК в поперечной оси";
+parameter Real SM2.G.Tj = 2.45 "Механическая инерционная постоянная";
+parameter Real SM2.G.Xt = 0 "Индуктивное сопротивление трансформатора";
+parameter Real SM2.G.Sigma = 0.0475 "Коэффициент статизма регулятора турбины";
+parameter Real SM2.G.TauC = 99999 "Постоянная времени сервомотора";
+parameter Real SM2.G.Mt_max = 0 "Верхнее ограничение момента турбины";
+parameter Real SM2.G.Mt_min = (-0.5) "Нижнее ограничение момента турбины";
+constant Real SM2.G.PI = 3.14159265358979;
+constant Real SM2.G.Wc = 100*SM2.G.PI;
+constant Real SM2.G.Ra = 0;
+constant Real SM2.G.Rt = 0;
+parameter Real SM2.AVR.K0u = (-10);
+parameter Real SM2.AVR.K1u = 0;
+parameter Real SM2.AVR.K0w = 0;
+parameter Real SM2.AVR.K1w = 0;
+parameter Real SM2.AVR.K1if = 0;
+parameter Real SM2.AVR.DL0 = 0;
+parameter Real SM2.AVR.Tokp = 0.05;
+constant Real SM2.AVR.T0u = 0.02;
+constant Real SM2.AVR.T1u = 0.039;
+constant Real SM2.AVR.Tfb = 0.07;
+constant Real SM2.AVR.T0w = 1;
+constant Real SM2.AVR.T1w = 0.026;
+constant Real SM2.AVR.T1if = 0.03;
+parameter Real SM2.AVR.VoltageDeviation.b[:] = {SM2.AVR.K0u} "Numerator coefficients of transfer function."
+;
+parameter Real SM2.AVR.VoltageDeviation.a[:] = {SM2.AVR.T0u, 1} "Denominator coefficients of transfer function."
+;
+parameter Integer SM2.AVR.VoltageDeviation.na = size(SM2.AVR.VoltageDeviation.a
+, 1) "Size of Denominator of transfer function.";
+parameter Integer SM2.AVR.VoltageDeviation.nb = size(SM2.AVR.VoltageDeviation.b
+, 1) "Size of Numerator of transfer function.";
+parameter Integer SM2.AVR.VoltageDeviation.nx = size(SM2.AVR.VoltageDeviation.a
+, 1)-1;
+parameter Real SM2.AVR.VoltageDerivative.b[:] = {SM2.AVR.K1u, 0} 
+"Numerator coefficients of transfer function.";
+parameter Real SM2.AVR.VoltageDerivative.a[:] = {SM2.AVR.T1u, 1} 
+"Denominator coefficients of transfer function.";
+parameter Integer SM2.AVR.VoltageDerivative.na = size(SM2.AVR.VoltageDerivative.a
+, 1) "Size of Denominator of transfer function.";
+parameter Integer SM2.AVR.VoltageDerivative.nb = size(SM2.AVR.VoltageDerivative.b
+, 1) "Size of Numerator of transfer function.";
+parameter Integer SM2.AVR.VoltageDerivative.nx = size(SM2.AVR.VoltageDerivative.a
+, 1)-1;
+parameter Real SM2.AVR.FrequencyBlockD.b[:] = {1} "Numerator coefficients of transfer function."
+;
+parameter Real SM2.AVR.FrequencyBlockD.a[:] = {SM2.AVR.Tfb, 1} "Denominator coefficients of transfer function."
+;
+parameter Integer SM2.AVR.FrequencyBlockD.na = size(SM2.AVR.FrequencyBlockD.a, 1
+) "Size of Denominator of transfer function.";
+parameter Integer SM2.AVR.FrequencyBlockD.nb = size(SM2.AVR.FrequencyBlockD.b, 1
+) "Size of Numerator of transfer function.";
+parameter Integer SM2.AVR.FrequencyBlockD.nx = size(SM2.AVR.FrequencyBlockD.a, 1
+)-1;
+parameter Real SM2.AVR.FrequencyBlockU.b[:] = {1, 0} "Numerator coefficients of transfer function."
+;
+parameter Real SM2.AVR.FrequencyBlockU.a[:] = {SM2.AVR.Tfb, 1} "Denominator coefficients of transfer function."
+;
+parameter Integer SM2.AVR.FrequencyBlockU.na = size(SM2.AVR.FrequencyBlockU.a, 1
+) "Size of Denominator of transfer function.";
+parameter Integer SM2.AVR.FrequencyBlockU.nb = size(SM2.AVR.FrequencyBlockU.b, 1
+) "Size of Numerator of transfer function.";
+parameter Integer SM2.AVR.FrequencyBlockU.nx = size(SM2.AVR.FrequencyBlockU.a, 1
+)-1;
+parameter Real SM2.AVR.FrequencyDeviation.b[:] = {SM2.AVR.K0w, 0} 
+"Numerator coefficients of transfer function.";
+parameter Real SM2.AVR.FrequencyDeviation.a[:] = {SM2.AVR.T0w, 1} 
+"Denominator coefficients of transfer function.";
+parameter Integer SM2.AVR.FrequencyDeviation.na = size(SM2.AVR.FrequencyDeviation.a
+, 1) "Size of Denominator of transfer function.";
+parameter Integer SM2.AVR.FrequencyDeviation.nb = size(SM2.AVR.FrequencyDeviation.b
+, 1) "Size of Numerator of transfer function.";
+parameter Integer SM2.AVR.FrequencyDeviation.nx = size(SM2.AVR.FrequencyDeviation.a
+, 1)-1;
+parameter Real SM2.AVR.FrequencyDerivative.b[:] = {SM2.AVR.K1w, 0} 
+"Numerator coefficients of transfer function.";
+parameter Real SM2.AVR.FrequencyDerivative.a[:] = {SM2.AVR.T1w, 1} 
+"Denominator coefficients of transfer function.";
+parameter Integer SM2.AVR.FrequencyDerivative.na = size(SM2.AVR.FrequencyDerivative.a
+, 1) "Size of Denominator of transfer function.";
+parameter Integer SM2.AVR.FrequencyDerivative.nb = size(SM2.AVR.FrequencyDerivative.b
+, 1) "Size of Numerator of transfer function.";
+parameter Integer SM2.AVR.FrequencyDerivative.nx = size(SM2.AVR.FrequencyDerivative.a
+, 1)-1;
+parameter Real SM2.AVR.ExcitationCurrent.b[:] = {SM2.AVR.K1if, 0} 
+"Numerator coefficients of transfer function.";
+parameter Real SM2.AVR.ExcitationCurrent.a[:] = {SM2.AVR.T1if, 1} 
+"Denominator coefficients of transfer function.";
+parameter Integer SM2.AVR.ExcitationCurrent.na = size(SM2.AVR.ExcitationCurrent.a
+, 1) "Size of Denominator of transfer function.";
+parameter Integer SM2.AVR.ExcitationCurrent.nb = size(SM2.AVR.ExcitationCurrent.b
+, 1) "Size of Numerator of transfer function.";
+parameter Integer SM2.AVR.ExcitationCurrent.nx = size(SM2.AVR.ExcitationCurrent.a
+, 1)-1;
+parameter Real SM2.AVR.SimpleExciter.b[:] = {1} "Numerator coefficients of transfer function."
+;
+parameter Real SM2.AVR.SimpleExciter.a[:] = {SM2.AVR.Tokp, 1} "Denominator coefficients of transfer function."
+;
+parameter Integer SM2.AVR.SimpleExciter.na = size(SM2.AVR.SimpleExciter.a, 1) 
+"Size of Denominator of transfer function.";
+parameter Integer SM2.AVR.SimpleExciter.nb = size(SM2.AVR.SimpleExciter.b, 1) 
+"Size of Numerator of transfer function.";
+parameter Integer SM2.AVR.SimpleExciter.nx = size(SM2.AVR.SimpleExciter.a, 1)-1;
+parameter Real KZ1.Bn = (-100000);
+parameter Real KZ1.TkzOn = 1000;
+parameter Real KZ1.dTkzOn = 0.12;
+parameter Real KZ2.Bn = (-100000);
+parameter Real KZ2.TkzOn = 1000;
+parameter Real KZ2.dTkzOn = 0.12;
+
+Real G1.G.dUtr;
+Real G1.G.dWu;
+Real G1.G.dIf;
+Real G1.G.dEr;
+Real G1.G.dWf;
+Real G1.G.EQ;
+Real G1.G.Dg;
+Real G1.G.Uq;
+Real G1.G.Ud;
+Real G1.G.Id;
+Real G1.G.Iq;
+Real G1.G.Mt;
+Real G1.G.Eiq;
+Real G1.G.Ir;
+Real G1.G.Uf;
+Real G1.G.Eq;
+Real G1.G.Er0;
+Real G1.G.PsiR;
+Real G1.G.PsiRD;
+Real G1.G.PsiRQ;
+Real G1.G.Er_max;
+Real G1.G.Er_min;
+Real G1.G.Uf_full;
+Real G1.G.Xad;
+Real G1.G.Xaq;
+Real G1.G.X2dt;
+Real G1.G.X2qt;
+Real G1.G.Rs;
+Real G1.G.Xsf;
+Real G1.G.Xs1d;
+Real G1.G.Xs1q;
+Real G1.G.X1;
+Real G1.G.X2;
+Real G1.G.X3;
+Real G1.G.Ugen;
+Real G1.G.Mu0;
+Real G1.G.Ro;
+Real G1.G.Mu;
+Real G1.G.Mt_pp;
+Real G1.G.Pgen;
+Real G1.G.Qgen;
+Real G1.G.UdG;
+Real G1.G.UqG;
+Real G1.G.IdG;
+Real G1.G.IqG;
+Real G1.G.DeltaIJ;
+Real G1.G.Ssys;
+Real G1.G.Yr;
+Real G1.G.Yrd;
+Real G1.G.Yrq;
+Real G1.G.s;
+Real G1.G.Me;
+Real G1.G.Yad;
+Real G1.G.Yaq;
+Real G1.G.iq;
+Real G1.G.id;
+Real G1.G.ir;
+Real G1.G.ird;
+Real G1.G.irq;
+Real G1.G.ud;
+Real G1.G.uq;
+Real G1.G.E11d;
+Real G1.G.E11q;
+Real G1.AVR.VoltageDeviation.x[size(G1.AVR.VoltageDeviation.a, 1)-1] 
+"State of transfer function from controller canonical form";
+Real G1.AVR.VoltageDeviation.x1dot "Derivative of first state of TransferFcn";
+Real G1.AVR.VoltageDeviation.xn "Highest order state of TransferFcn";
+Real G1.AVR.VoltageDeviation.u;
+Real G1.AVR.VoltageDeviation.y;
+Real G1.AVR.VoltageDerivative.x[size(G1.AVR.VoltageDerivative.a, 1)-1] 
+"State of transfer function from controller canonical form";
+Real G1.AVR.VoltageDerivative.x1dot "Derivative of first state of TransferFcn";
+Real G1.AVR.VoltageDerivative.xn "Highest order state of TransferFcn";
+Real G1.AVR.VoltageDerivative.u;
+Real G1.AVR.VoltageDerivative.y;
+Real G1.AVR.FrequencyBlockD.x[size(G1.AVR.FrequencyBlockD.a, 1)-1] 
+"State of transfer function from controller canonical form";
+Real G1.AVR.FrequencyBlockD.x1dot "Derivative of first state of TransferFcn";
+Real G1.AVR.FrequencyBlockD.xn "Highest order state of TransferFcn";
+Real G1.AVR.FrequencyBlockD.u;
+Real G1.AVR.FrequencyBlockD.y;
+Real G1.AVR.FrequencyBlockU.x[size(G1.AVR.FrequencyBlockU.a, 1)-1] 
+"State of transfer function from controller canonical form";
+Real G1.AVR.FrequencyBlockU.x1dot "Derivative of first state of TransferFcn";
+Real G1.AVR.FrequencyBlockU.xn "Highest order state of TransferFcn";
+Real G1.AVR.FrequencyBlockU.u;
+Real G1.AVR.FrequencyBlockU.y;
+Real G1.AVR.FrequencyDeviation.x[size(G1.AVR.FrequencyDeviation.a, 1)-1] 
+"State of transfer function from controller canonical form";
+Real G1.AVR.FrequencyDeviation.x1dot "Derivative of first state of TransferFcn";
+Real G1.AVR.FrequencyDeviation.xn "Highest order state of TransferFcn";
+Real G1.AVR.FrequencyDeviation.u;
+Real G1.AVR.FrequencyDeviation.y;
+Real G1.AVR.FrequencyDerivative.x[size(G1.AVR.FrequencyDerivative.a, 1)-1] 
+"State of transfer function from controller canonical form";
+Real G1.AVR.FrequencyDerivative.x1dot "Derivative of first state of TransferFcn"
+;
+Real G1.AVR.FrequencyDerivative.xn "Highest order state of TransferFcn";
+Real G1.AVR.FrequencyDerivative.u;
+Real G1.AVR.FrequencyDerivative.y;
+Real G1.AVR.ExcitationCurrent.x[size(G1.AVR.ExcitationCurrent.a, 1)-1] 
+"State of transfer function from controller canonical form";
+Real G1.AVR.ExcitationCurrent.x1dot "Derivative of first state of TransferFcn";
+Real G1.AVR.ExcitationCurrent.xn "Highest order state of TransferFcn";
+Real G1.AVR.ExcitationCurrent.u;
+Real G1.AVR.ExcitationCurrent.y;
+Real G1.AVR.SimpleExciter.x[size(G1.AVR.SimpleExciter.a, 1)-1] "State of transfer function from controller canonical form"
+;
+Real G1.AVR.SimpleExciter.x1dot "Derivative of first state of TransferFcn";
+Real G1.AVR.SimpleExciter.xn "Highest order state of TransferFcn";
+Real G1.AVR.SimpleExciter.u;
+Real G1.AVR.SimpleExciter.y;
+Real G1.AVR.u_u;
+Real G1.AVR.u_pu;
+Real G1.AVR.u_fsys;
+Real G1.AVR.u_fu;
+Real G1.AVR.u_pIf;
+Real G1.AVR.y_er;
+Real G1.AVR.f_sum;
+Real L0102.U1d;
+Real L0102.U1q;
+Real L0102.U2d;
+Real L0102.U2q;
+Real L0102.I12d;
+Real L0102.I12q;
+Real L0102.I12m;
+Real L0102.U1m;
+Real L0102.U2m;
+Real L0102.I1d;
+Real L0102.I1q;
+Real L0102.I2d;
+Real L0102.I2q;
+Real L0102.Idc1;
+Real L0102.Iqc1;
+Real L0102.Idc2;
+Real L0102.Iqc2;
+Real L0102.DU1;
+Real L0102.DU2;
+Real L0102.Ssys;
+Real L0102.Bnn;
+Real L0102.P1;
+Real L0102.Q1;
+Real L0102.P2;
+Real L0102.Q2;
+Real L0102.RL;
+Real L0102.XL;
+Real L0102.BL;
+Real SM2.G.dUtr;
+Real SM2.G.dWu;
+Real SM2.G.dIf;
+Real SM2.G.dEr;
+Real SM2.G.dWf;
+Real SM2.G.EQ;
+Real SM2.G.Dg;
+Real SM2.G.Uq;
+Real SM2.G.Ud;
+Real SM2.G.Id;
+Real SM2.G.Iq;
+Real SM2.G.Mt;
+Real SM2.G.Eiq;
+Real SM2.G.Ir;
+Real SM2.G.Uf;
+Real SM2.G.Eq;
+Real SM2.G.Er0;
+Real SM2.G.PsiR;
+Real SM2.G.PsiRD;
+Real SM2.G.PsiRQ;
+Real SM2.G.Er_max;
+Real SM2.G.Er_min;
+Real SM2.G.Uf_full;
+Real SM2.G.Xad;
+Real SM2.G.Xaq;
+Real SM2.G.X2dt;
+Real SM2.G.X2qt;
+Real SM2.G.Rs;
+Real SM2.G.Xsf;
+Real SM2.G.Xs1d;
+Real SM2.G.Xs1q;
+Real SM2.G.X1;
+Real SM2.G.X2;
+Real SM2.G.X3;
+Real SM2.G.Ugen;
+Real SM2.G.Mu0;
+Real SM2.G.Ro;
+Real SM2.G.Mu;
+Real SM2.G.Mt_pp;
+Real SM2.G.Pgen;
+Real SM2.G.Qgen;
+Real SM2.G.UdG;
+Real SM2.G.UqG;
+Real SM2.G.IdG;
+Real SM2.G.IqG;
+Real SM2.G.DeltaIJ;
+Real SM2.G.Ssys;
+Real SM2.G.Yr;
+Real SM2.G.Yrd;
+Real SM2.G.Yrq;
+Real SM2.G.s;
+Real SM2.G.Me;
+Real SM2.G.Yad;
+Real SM2.G.Yaq;
+Real SM2.G.iq;
+Real SM2.G.id;
+Real SM2.G.ir;
+Real SM2.G.ird;
+Real SM2.G.irq;
+Real SM2.G.ud;
+Real SM2.G.uq;
+Real SM2.G.E11d;
+Real SM2.G.E11q;
+Real SM2.AVR.VoltageDeviation.x[size(SM2.AVR.VoltageDeviation.a, 1)-1] 
+"State of transfer function from controller canonical form";
+Real SM2.AVR.VoltageDeviation.x1dot "Derivative of first state of TransferFcn";
+Real SM2.AVR.VoltageDeviation.xn "Highest order state of TransferFcn";
+Real SM2.AVR.VoltageDeviation.u;
+Real SM2.AVR.VoltageDeviation.y;
+Real SM2.AVR.VoltageDerivative.x[size(SM2.AVR.VoltageDerivative.a, 1)-1] 
+"State of transfer function from controller canonical form";
+Real SM2.AVR.VoltageDerivative.x1dot "Derivative of first state of TransferFcn";
+Real SM2.AVR.VoltageDerivative.xn "Highest order state of TransferFcn";
+Real SM2.AVR.VoltageDerivative.u;
+Real SM2.AVR.VoltageDerivative.y;
+Real SM2.AVR.FrequencyBlockD.x[size(SM2.AVR.FrequencyBlockD.a, 1)-1] 
+"State of transfer function from controller canonical form";
+Real SM2.AVR.FrequencyBlockD.x1dot "Derivative of first state of TransferFcn";
+Real SM2.AVR.FrequencyBlockD.xn "Highest order state of TransferFcn";
+Real SM2.AVR.FrequencyBlockD.u;
+Real SM2.AVR.FrequencyBlockD.y;
+Real SM2.AVR.FrequencyBlockU.x[size(SM2.AVR.FrequencyBlockU.a, 1)-1] 
+"State of transfer function from controller canonical form";
+Real SM2.AVR.FrequencyBlockU.x1dot "Derivative of first state of TransferFcn";
+Real SM2.AVR.FrequencyBlockU.xn "Highest order state of TransferFcn";
+Real SM2.AVR.FrequencyBlockU.u;
+Real SM2.AVR.FrequencyBlockU.y;
+Real SM2.AVR.FrequencyDeviation.x[size(SM2.AVR.FrequencyDeviation.a, 1)-1] 
+"State of transfer function from controller canonical form";
+Real SM2.AVR.FrequencyDeviation.x1dot "Derivative of first state of TransferFcn"
+;
+Real SM2.AVR.FrequencyDeviation.xn "Highest order state of TransferFcn";
+Real SM2.AVR.FrequencyDeviation.u;
+Real SM2.AVR.FrequencyDeviation.y;
+Real SM2.AVR.FrequencyDerivative.x[size(SM2.AVR.FrequencyDerivative.a, 1)-1] 
+"State of transfer function from controller canonical form";
+Real SM2.AVR.FrequencyDerivative.x1dot "Derivative of first state of TransferFcn"
+;
+Real SM2.AVR.FrequencyDerivative.xn "Highest order state of TransferFcn";
+Real SM2.AVR.FrequencyDerivative.u;
+Real SM2.AVR.FrequencyDerivative.y;
+Real SM2.AVR.ExcitationCurrent.x[size(SM2.AVR.ExcitationCurrent.a, 1)-1] 
+"State of transfer function from controller canonical form";
+Real SM2.AVR.ExcitationCurrent.x1dot "Derivative of first state of TransferFcn";
+Real SM2.AVR.ExcitationCurrent.xn "Highest order state of TransferFcn";
+Real SM2.AVR.ExcitationCurrent.u;
+Real SM2.AVR.ExcitationCurrent.y;
+Real SM2.AVR.SimpleExciter.x[size(SM2.AVR.SimpleExciter.a, 1)-1] 
+"State of transfer function from controller canonical form";
+Real SM2.AVR.SimpleExciter.x1dot "Derivative of first state of TransferFcn";
+Real SM2.AVR.SimpleExciter.xn "Highest order state of TransferFcn";
+Real SM2.AVR.SimpleExciter.u;
+Real SM2.AVR.SimpleExciter.y;
+Real SM2.AVR.u_u;
+Real SM2.AVR.u_pu;
+Real SM2.AVR.u_fsys;
+Real SM2.AVR.u_fu;
+Real SM2.AVR.u_pIf;
+Real SM2.AVR.y_er;
+Real SM2.AVR.f_sum;
+Real KZ1.id;
+Real KZ1.iq;
+Real KZ1.Ud;
+Real KZ1.Uq;
+Real KZ2.id;
+Real KZ2.iq;
+Real KZ2.Ud;
+Real KZ2.Uq;
+Real delta_G1_SM2;
+
+equation
+when initial() then
+  G1.G.Xad = G1.G.Xd-G1.G.Xs;
+  G1.G.Xaq = G1.G.Xq-G1.G.Xs;
+  G1.G.X2dt = G1.G.X2d+G1.G.Xt;
+  G1.G.X2qt = G1.G.X2q+G1.G.Xt;
+  G1.G.Rs = G1.G.Ra+G1.G.Rt;
+  G1.G.Xsf = 1/(1/(G1.G.X1d-G1.G.Xs)-1/G1.G.Xad);
+  G1.G.Xs1d = 1/(1/(G1.G.X2d-G1.G.Xs)-1/G1.G.Xad-1/G1.G.Xsf);
+  G1.G.Xs1q = 1/(1/(G1.G.X2q-G1.G.Xs)-1/G1.G.Xaq);
+  G1.G.X1 = (G1.G.X2d-G1.G.Xs)/G1.G.Xsf;
+  G1.G.X2 = (G1.G.X2d-G1.G.Xs)/G1.G.Xs1d;
+  G1.G.X3 = (G1.G.X2q-G1.G.Xs)/G1.G.Xs1q;
+  G1.G.EQ = sqrt((G1.G.Ut+((G1.G.Ra+G1.G.Rt)*G1.G.Pg+(G1.G.Xq+G1.G.Xt)*G1.G.Qg)/
+  G1.G.Ut)^2+(((G1.G.Xq+G1.G.Xt)*G1.G.Pg-(G1.G.Ra+G1.G.Rt)*G1.G.Qg)/G1.G.Ut)^2);
+  G1.G.Dg = arctan2(((G1.G.Xq+G1.G.Xt)*G1.G.Pg-(G1.G.Ra+G1.G.Rt)*G1.G.Qg)/
+  G1.G.Ut, G1.G.Ut+((G1.G.Ra+G1.G.Rt)*G1.G.Pg+(G1.G.Xq+G1.G.Xt)*G1.G.Qg)/G1.G.Ut
+  );
+  G1.G.Uq = G1.G.Ut*cos(G1.G.Dg);
+  G1.G.Ud =  -G1.G.Ut*sin(G1.G.Dg);
+  G1.G.Id = ((G1.G.Uq-G1.G.EQ)*(G1.G.Xq+G1.G.Xt)-(G1.G.Ra+G1.G.Rt)*G1.G.Ud)/((
+  G1.G.Ra+G1.G.Rt)^2+(G1.G.Xq+G1.G.Xt)^2);
+  G1.G.Iq =  -(G1.G.Ud+(G1.G.Ra+G1.G.Rt)*G1.G.Id)/(G1.G.Xq+G1.G.Xt);
+  G1.G.Mt = G1.G.EQ*G1.G.Iq;
+  G1.G.Mu0 = G1.G.Mt;
+  G1.G.Eiq = G1.G.Uq-G1.G.Id*(G1.G.Xs+G1.G.Xt)+(G1.G.Ra+G1.G.Rt)*G1.G.Iq;
+  G1.G.Ir = G1.G.Eiq/G1.G.Xad-G1.G.Id;
+  G1.G.Uf = G1.G.Ir*G1.G.Rf;
+  G1.G.Eq = G1.G.Ir*G1.G.Xad;
+  G1.G.Er0 = G1.G.Eq;
+  G1.G.PsiR = G1.G.Eiq+G1.G.Xsf*G1.G.Ir;
+  G1.G.PsiRQ =  -(G1.G.Ud+G1.G.Iq*(G1.G.Xs+G1.G.Xt)+G1.G.Id*(G1.G.Ra+G1.G.Rt));
+  G1.G.PsiRD = G1.G.Eiq;
+  G1.G.Er_max = 2*G1.G.Er0;
+  G1.G.Er_min =  -0.6*G1.G.Er0;
+  reinit(G1.G.s, 0);
+  reinit(G1.G.Yr, G1.G.PsiR);
+  reinit(G1.G.Yrd, G1.G.PsiRD);
+  reinit(G1.G.Yrq, G1.G.PsiRQ);
+  reinit(G1.G.Mu, G1.G.Mu0);
+end when;
+G1.G.Uf_full = if G1.G.Uf*G1.G.Xad/G1.G.Rf+G1.G.dEr > G1.G.Er_max then 
+G1.G.Er_max*G1.G.Rf/G1.G.Xad else if G1.G.Uf*G1.G.Xad/G1.G.Rf+G1.G.dEr < 
+G1.G.Er_min then G1.G.Er_min*G1.G.Rf/G1.G.Xad else G1.G.Uf+G1.G.Rf*G1.G.dEr/
+G1.G.Xad;
+der(G1.G.Yr) = G1.G.Wc*(G1.G.Uf_full-G1.G.Rf*G1.G.ir);
+der(G1.G.Yrd) =  -G1.G.Wc*G1.G.R1d*G1.G.ird;
+der(G1.G.Yrq) =  -G1.G.Wc*G1.G.R1q*G1.G.irq;
+der(G1.G.s) = (G1.G.Mt_pp-G1.G.Me)/G1.G.Tj;
+G1.G.Ro = G1.G.Mu0-G1.G.Mu-G1.G.s/G1.G.Sigma;
+der(G1.G.Mu) = G1.G.Ro/G1.G.TauC;
+G1.G.Mt_pp = if G1.G.Mu >= G1.G.Mt_min and G1.G.Mu <= G1.G.Mt_max then G1.G.Mu
+ else if G1.G.Mu > G1.G.Mt_max then G1.G.Mt_max else G1.G.Mt_min;
+G1.G.Me = G1.G.Yad*G1.G.iq-G1.G.Yaq*G1.G.id;
+G1.G.ir = (G1.G.Yr-G1.G.Yad)/G1.G.Xsf;
+G1.G.ird = (G1.G.Yrd-G1.G.Yad)/G1.G.Xs1d;
+G1.G.irq = (G1.G.Yrq-G1.G.Yaq)/G1.G.Xs1q;
+G1.G.id = if time >= G1.G.TgenOff and time < G1.G.TgenOff+G1.G.dTgenOff then 0
+ else ((G1.G.uq-G1.G.E11q)*G1.G.X2qt-G1.G.Rs*(G1.G.ud+G1.G.E11d))/(G1.G.X2dt*
+G1.G.X2qt+G1.G.Rs^2);
+G1.G.iq = if time >= G1.G.TgenOff and time < G1.G.TgenOff+G1.G.dTgenOff then 0
+ else  -(G1.G.ud+G1.G.E11d+G1.G.Rs*G1.G.id)/G1.G.X2qt;
+G1.G.E11d = G1.G.X3*G1.G.Yrq;
+G1.G.E11q = G1.G.X1*G1.G.Yr+G1.G.X2*G1.G.Yrd;
+G1.G.Yad = G1.G.E11q+G1.G.id*(G1.G.X2d-G1.G.Xs);
+G1.G.Yaq = G1.G.E11d+G1.G.iq*(G1.G.X2q-G1.G.Xs);
+G1.G.Ugen = sqrt(G1.G.ud^2+G1.G.uq^2);
+G1.G.dUtr = sqrt(G1.G.ud^2+G1.G.uq^2)-G1.G.Ut;
+G1.G.dWu = G1.G.Wc*G1.G.Ssys;
+G1.G.dWf = if G1.G.UqG <> 0 then arctan2(G1.G.UdG, G1.G.UqG) else arctan2(
+G1.G.UdG, 0.001);
+G1.G.dIf = G1.G.ir-G1.G.Ir;
+G1.G.Pgen = G1.G.uq*G1.G.iq+G1.G.ud*G1.G.id;
+G1.G.Qgen = G1.G.ud*G1.G.iq-G1.G.uq*G1.G.id;
+G1.G.uq = G1.G.UqG*cos(G1.G.DeltaIJ)-G1.G.UdG*sin(G1.G.DeltaIJ);
+G1.G.ud = G1.G.UqG*sin(G1.G.DeltaIJ)+G1.G.UdG*cos(G1.G.DeltaIJ);
+G1.G.IqG = G1.G.iq*cos(G1.G.DeltaIJ)+G1.G.id*sin(G1.G.DeltaIJ);
+G1.G.IdG = G1.G.id*cos(G1.G.DeltaIJ)-G1.G.iq*sin(G1.G.DeltaIJ);
+[der(G1.AVR.VoltageDeviation.x); G1.AVR.VoltageDeviation.xn] = [G1.AVR.VoltageDeviation.x1dot
+; G1.AVR.VoltageDeviation.x];
+[G1.AVR.VoltageDeviation.u] = transpose([G1.AVR.VoltageDeviation.a])*[
+G1.AVR.VoltageDeviation.x1dot; G1.AVR.VoltageDeviation.x];
+[G1.AVR.VoltageDeviation.y] = transpose([zeros(G1.AVR.VoltageDeviation.na-
+G1.AVR.VoltageDeviation.nb, 1); G1.AVR.VoltageDeviation.b])*[G1.AVR.VoltageDeviation.x1dot
+; G1.AVR.VoltageDeviation.x];
+[der(G1.AVR.VoltageDerivative.x); G1.AVR.VoltageDerivative.xn] = [
+G1.AVR.VoltageDerivative.x1dot; G1.AVR.VoltageDerivative.x];
+[G1.AVR.VoltageDerivative.u] = transpose([G1.AVR.VoltageDerivative.a])*[
+G1.AVR.VoltageDerivative.x1dot; G1.AVR.VoltageDerivative.x];
+[G1.AVR.VoltageDerivative.y] = transpose([zeros(G1.AVR.VoltageDerivative.na-
+G1.AVR.VoltageDerivative.nb, 1); G1.AVR.VoltageDerivative.b])*[G1.AVR.VoltageDerivative.x1dot
+; G1.AVR.VoltageDerivative.x];
+[der(G1.AVR.FrequencyBlockD.x); G1.AVR.FrequencyBlockD.xn] = [G1.AVR.FrequencyBlockD.x1dot
+; G1.AVR.FrequencyBlockD.x];
+[G1.AVR.FrequencyBlockD.u] = transpose([G1.AVR.FrequencyBlockD.a])*[
+G1.AVR.FrequencyBlockD.x1dot; G1.AVR.FrequencyBlockD.x];
+[G1.AVR.FrequencyBlockD.y] = transpose([zeros(G1.AVR.FrequencyBlockD.na-
+G1.AVR.FrequencyBlockD.nb, 1); G1.AVR.FrequencyBlockD.b])*[G1.AVR.FrequencyBlockD.x1dot
+; G1.AVR.FrequencyBlockD.x];
+[der(G1.AVR.FrequencyBlockU.x); G1.AVR.FrequencyBlockU.xn] = [G1.AVR.FrequencyBlockU.x1dot
+; G1.AVR.FrequencyBlockU.x];
+[G1.AVR.FrequencyBlockU.u] = transpose([G1.AVR.FrequencyBlockU.a])*[
+G1.AVR.FrequencyBlockU.x1dot; G1.AVR.FrequencyBlockU.x];
+[G1.AVR.FrequencyBlockU.y] = transpose([zeros(G1.AVR.FrequencyBlockU.na-
+G1.AVR.FrequencyBlockU.nb, 1); G1.AVR.FrequencyBlockU.b])*[G1.AVR.FrequencyBlockU.x1dot
+; G1.AVR.FrequencyBlockU.x];
+[der(G1.AVR.FrequencyDeviation.x); G1.AVR.FrequencyDeviation.xn] = [
+G1.AVR.FrequencyDeviation.x1dot; G1.AVR.FrequencyDeviation.x];
+[G1.AVR.FrequencyDeviation.u] = transpose([G1.AVR.FrequencyDeviation.a])*[
+G1.AVR.FrequencyDeviation.x1dot; G1.AVR.FrequencyDeviation.x];
+[G1.AVR.FrequencyDeviation.y] = transpose([zeros(G1.AVR.FrequencyDeviation.na-
+G1.AVR.FrequencyDeviation.nb, 1); G1.AVR.FrequencyDeviation.b])*[
+G1.AVR.FrequencyDeviation.x1dot; G1.AVR.FrequencyDeviation.x];
+[der(G1.AVR.FrequencyDerivative.x); G1.AVR.FrequencyDerivative.xn] = [
+G1.AVR.FrequencyDerivative.x1dot; G1.AVR.FrequencyDerivative.x];
+[G1.AVR.FrequencyDerivative.u] = transpose([G1.AVR.FrequencyDerivative.a])*[
+G1.AVR.FrequencyDerivative.x1dot; G1.AVR.FrequencyDerivative.x];
+[G1.AVR.FrequencyDerivative.y] = transpose([zeros(G1.AVR.FrequencyDerivative.na-
+G1.AVR.FrequencyDerivative.nb, 1); G1.AVR.FrequencyDerivative.b])*[
+G1.AVR.FrequencyDerivative.x1dot; G1.AVR.FrequencyDerivative.x];
+[der(G1.AVR.ExcitationCurrent.x); G1.AVR.ExcitationCurrent.xn] = [
+G1.AVR.ExcitationCurrent.x1dot; G1.AVR.ExcitationCurrent.x];
+[G1.AVR.ExcitationCurrent.u] = transpose([G1.AVR.ExcitationCurrent.a])*[
+G1.AVR.ExcitationCurrent.x1dot; G1.AVR.ExcitationCurrent.x];
+[G1.AVR.ExcitationCurrent.y] = transpose([zeros(G1.AVR.ExcitationCurrent.na-
+G1.AVR.ExcitationCurrent.nb, 1); G1.AVR.ExcitationCurrent.b])*[G1.AVR.ExcitationCurrent.x1dot
+; G1.AVR.ExcitationCurrent.x];
+[der(G1.AVR.SimpleExciter.x); G1.AVR.SimpleExciter.xn] = [G1.AVR.SimpleExciter.x1dot
+; G1.AVR.SimpleExciter.x];
+[G1.AVR.SimpleExciter.u] = transpose([G1.AVR.SimpleExciter.a])*[G1.AVR.SimpleExciter.x1dot
+; G1.AVR.SimpleExciter.x];
+[G1.AVR.SimpleExciter.y] = transpose([zeros(G1.AVR.SimpleExciter.na-
+G1.AVR.SimpleExciter.nb, 1); G1.AVR.SimpleExciter.b])*[G1.AVR.SimpleExciter.x1dot
+; G1.AVR.SimpleExciter.x];
+when initial() then
+  reinit(G1.AVR.FrequencyBlockU.x[1], G1.AVR.DL0);
+end when;
+G1.AVR.u_u = G1.AVR.VoltageDeviation.u;
+G1.AVR.u_pu = G1.AVR.VoltageDerivative.u;
+G1.AVR.u_fsys = G1.AVR.FrequencyBlockD.u;
+G1.AVR.u_fu = G1.AVR.FrequencyBlockU.u;
+G1.AVR.u_pIf = G1.AVR.ExcitationCurrent.u;
+G1.AVR.f_sum = G1.AVR.FrequencyBlockD.y+G1.AVR.FrequencyBlockU.y;
+G1.AVR.FrequencyDeviation.u = G1.AVR.f_sum;
+G1.AVR.FrequencyDerivative.u = G1.AVR.f_sum;
+G1.AVR.VoltageDeviation.y+G1.AVR.VoltageDerivative.y+G1.AVR.ExcitationCurrent.y+
+G1.AVR.FrequencyDeviation.y+G1.AVR.FrequencyDerivative.y = G1.AVR.SimpleExciter.u
+;
+G1.AVR.y_er = G1.AVR.SimpleExciter.y;
+L0102.RL = if time >= L0102.TLineOff and time < L0102.TLineOff+L0102.dTLineOff
+ then L0102.Koff*L0102.Rline else L0102.Rline;
+L0102.XL = if time >= L0102.TLineOff and time < L0102.TLineOff+L0102.dTLineOff
+ then L0102.Koff*L0102.Xline else L0102.Xline;
+L0102.BL = if time >= L0102.TLineOff and time < L0102.TLineOff+L0102.dTLineOff
+ then L0102.Bline/L0102.Koff else L0102.Bline;
+L0102.U1q = L0102.U2q+L0102.RL*L0102.I12q-L0102.XL*L0102.I12d;
+L0102.U1d = L0102.U2d+L0102.RL*L0102.I12d+L0102.XL*L0102.I12q;
+L0102.Bnn = L0102.BL/(1+L0102.Ssys);
+L0102.Idc1 = 0.5*L0102.U1q*L0102.Bnn;
+L0102.Iqc1 =  -0.5*L0102.U1d*L0102.Bnn;
+L0102.Idc2 = 0.5*L0102.U2q*L0102.Bnn;
+L0102.Iqc2 =  -0.5*L0102.U2d*L0102.Bnn;
+L0102.I1d = L0102.Idc1+L0102.I12d;
+L0102.I1q = L0102.Iqc1+L0102.I12q;
+L0102.I12d = L0102.Idc2+L0102.I2d;
+L0102.I12q = L0102.Iqc2+L0102.I2q;
+L0102.I12m = sqrt(L0102.I12d^2+L0102.I12q^2);
+L0102.U1m = sqrt(L0102.U1d^2+L0102.U1q^2);
+L0102.U2m = sqrt(L0102.U2d^2+L0102.U2q^2);
+L0102.DU1 = arctan2(L0102.U1d, L0102.U1q);
+L0102.DU2 = arctan2(L0102.U2d, L0102.U2q);
+L0102.P1 = L0102.U1q*L0102.I1q+L0102.U1d*L0102.I1d;
+L0102.Q1 = L0102.U1d*L0102.I1q-L0102.U1q*L0102.I1d;
+L0102.P2 = L0102.U2q*L0102.I2q+L0102.U2d*L0102.I2d;
+L0102.Q2 = L0102.U2d*L0102.I2q-L0102.U2q*L0102.I2d;
+when initial() then
+  SM2.G.Xad = SM2.G.Xd-SM2.G.Xs;
+  SM2.G.Xaq = SM2.G.Xq-SM2.G.Xs;
+  SM2.G.X2dt = SM2.G.X2d+SM2.G.Xt;
+  SM2.G.X2qt = SM2.G.X2q+SM2.G.Xt;
+  SM2.G.Rs = SM2.G.Ra+SM2.G.Rt;
+  SM2.G.Xsf = 1/(1/(SM2.G.X1d-SM2.G.Xs)-1/SM2.G.Xad);
+  SM2.G.Xs1d = 1/(1/(SM2.G.X2d-SM2.G.Xs)-1/SM2.G.Xad-1/SM2.G.Xsf);
+  SM2.G.Xs1q = 1/(1/(SM2.G.X2q-SM2.G.Xs)-1/SM2.G.Xaq);
+  SM2.G.X1 = (SM2.G.X2d-SM2.G.Xs)/SM2.G.Xsf;
+  SM2.G.X2 = (SM2.G.X2d-SM2.G.Xs)/SM2.G.Xs1d;
+  SM2.G.X3 = (SM2.G.X2q-SM2.G.Xs)/SM2.G.Xs1q;
+  SM2.G.EQ = sqrt((SM2.G.Ut+((SM2.G.Ra+SM2.G.Rt)*SM2.G.Pg+(SM2.G.Xq+SM2.G.Xt)*
+  SM2.G.Qg)/SM2.G.Ut)^2+(((SM2.G.Xq+SM2.G.Xt)*SM2.G.Pg-(SM2.G.Ra+SM2.G.Rt)*
+  SM2.G.Qg)/SM2.G.Ut)^2);
+  SM2.G.Dg = arctan2(((SM2.G.Xq+SM2.G.Xt)*SM2.G.Pg-(SM2.G.Ra+SM2.G.Rt)*SM2.G.Qg)
+  /SM2.G.Ut, SM2.G.Ut+((SM2.G.Ra+SM2.G.Rt)*SM2.G.Pg+(SM2.G.Xq+SM2.G.Xt)*SM2.G.Qg
+  )/SM2.G.Ut);
+  SM2.G.Uq = SM2.G.Ut*cos(SM2.G.Dg);
+  SM2.G.Ud =  -SM2.G.Ut*sin(SM2.G.Dg);
+  SM2.G.Id = ((SM2.G.Uq-SM2.G.EQ)*(SM2.G.Xq+SM2.G.Xt)-(SM2.G.Ra+SM2.G.Rt)*
+  SM2.G.Ud)/((SM2.G.Ra+SM2.G.Rt)^2+(SM2.G.Xq+SM2.G.Xt)^2);
+  SM2.G.Iq =  -(SM2.G.Ud+(SM2.G.Ra+SM2.G.Rt)*SM2.G.Id)/(SM2.G.Xq+SM2.G.Xt);
+  SM2.G.Mt = SM2.G.EQ*SM2.G.Iq;
+  SM2.G.Mu0 = SM2.G.Mt;
+  SM2.G.Eiq = SM2.G.Uq-SM2.G.Id*(SM2.G.Xs+SM2.G.Xt)+(SM2.G.Ra+SM2.G.Rt)*SM2.G.Iq
+  ;
+  SM2.G.Ir = SM2.G.Eiq/SM2.G.Xad-SM2.G.Id;
+  SM2.G.Uf = SM2.G.Ir*SM2.G.Rf;
+  SM2.G.Eq = SM2.G.Ir*SM2.G.Xad;
+  SM2.G.Er0 = SM2.G.Eq;
+  SM2.G.PsiR = SM2.G.Eiq+SM2.G.Xsf*SM2.G.Ir;
+  SM2.G.PsiRQ =  -(SM2.G.Ud+SM2.G.Iq*(SM2.G.Xs+SM2.G.Xt)+SM2.G.Id*(SM2.G.Ra+
+  SM2.G.Rt));
+  SM2.G.PsiRD = SM2.G.Eiq;
+  SM2.G.Er_max = 2*SM2.G.Er0;
+  SM2.G.Er_min =  -0.6*SM2.G.Er0;
+  reinit(SM2.G.s, 0);
+  reinit(SM2.G.Yr, SM2.G.PsiR);
+  reinit(SM2.G.Yrd, SM2.G.PsiRD);
+  reinit(SM2.G.Yrq, SM2.G.PsiRQ);
+  reinit(SM2.G.Mu, SM2.G.Mu0);
+end when;
+SM2.G.Uf_full = if SM2.G.Uf*SM2.G.Xad/SM2.G.Rf+SM2.G.dEr > SM2.G.Er_max then 
+SM2.G.Er_max*SM2.G.Rf/SM2.G.Xad else if SM2.G.Uf*SM2.G.Xad/SM2.G.Rf+SM2.G.dEr < 
+SM2.G.Er_min then SM2.G.Er_min*SM2.G.Rf/SM2.G.Xad else SM2.G.Uf+SM2.G.Rf*
+SM2.G.dEr/SM2.G.Xad;
+der(SM2.G.Yr) = SM2.G.Wc*(SM2.G.Uf_full-SM2.G.Rf*SM2.G.ir);
+der(SM2.G.Yrd) =  -SM2.G.Wc*SM2.G.R1d*SM2.G.ird;
+der(SM2.G.Yrq) =  -SM2.G.Wc*SM2.G.R1q*SM2.G.irq;
+der(SM2.G.s) = (SM2.G.Mt_pp-SM2.G.Me)/SM2.G.Tj;
+SM2.G.Ro = SM2.G.Mu0-SM2.G.Mu-SM2.G.s/SM2.G.Sigma;
+der(SM2.G.Mu) = SM2.G.Ro/SM2.G.TauC;
+SM2.G.Mt_pp = if SM2.G.Mu >= SM2.G.Mt_min and SM2.G.Mu <= SM2.G.Mt_max then 
+SM2.G.Mu else if SM2.G.Mu > SM2.G.Mt_max then SM2.G.Mt_max else SM2.G.Mt_min;
+SM2.G.Me = SM2.G.Yad*SM2.G.iq-SM2.G.Yaq*SM2.G.id;
+SM2.G.ir = (SM2.G.Yr-SM2.G.Yad)/SM2.G.Xsf;
+SM2.G.ird = (SM2.G.Yrd-SM2.G.Yad)/SM2.G.Xs1d;
+SM2.G.irq = (SM2.G.Yrq-SM2.G.Yaq)/SM2.G.Xs1q;
+SM2.G.id = if time >= SM2.G.TgenOff and time < SM2.G.TgenOff+SM2.G.dTgenOff
+ then 0 else ((SM2.G.uq-SM2.G.E11q)*SM2.G.X2qt-SM2.G.Rs*(SM2.G.ud+SM2.G.E11d))/(
+SM2.G.X2dt*SM2.G.X2qt+SM2.G.Rs^2);
+SM2.G.iq = if time >= SM2.G.TgenOff and time < SM2.G.TgenOff+SM2.G.dTgenOff
+ then 0 else  -(SM2.G.ud+SM2.G.E11d+SM2.G.Rs*SM2.G.id)/SM2.G.X2qt;
+SM2.G.E11d = SM2.G.X3*SM2.G.Yrq;
+SM2.G.E11q = SM2.G.X1*SM2.G.Yr+SM2.G.X2*SM2.G.Yrd;
+SM2.G.Yad = SM2.G.E11q+SM2.G.id*(SM2.G.X2d-SM2.G.Xs);
+SM2.G.Yaq = SM2.G.E11d+SM2.G.iq*(SM2.G.X2q-SM2.G.Xs);
+SM2.G.Ugen = sqrt(SM2.G.ud^2+SM2.G.uq^2);
+SM2.G.dUtr = sqrt(SM2.G.ud^2+SM2.G.uq^2)-SM2.G.Ut;
+SM2.G.dWu = SM2.G.Wc*SM2.G.Ssys;
+SM2.G.dWf = if SM2.G.UqG <> 0 then arctan2(SM2.G.UdG, SM2.G.UqG) else arctan2(
+SM2.G.UdG, 0.001);
+SM2.G.dIf = SM2.G.ir-SM2.G.Ir;
+SM2.G.Pgen = SM2.G.uq*SM2.G.iq+SM2.G.ud*SM2.G.id;
+SM2.G.Qgen = SM2.G.ud*SM2.G.iq-SM2.G.uq*SM2.G.id;
+SM2.G.uq = SM2.G.UqG*cos(SM2.G.DeltaIJ)-SM2.G.UdG*sin(SM2.G.DeltaIJ);
+SM2.G.ud = SM2.G.UqG*sin(SM2.G.DeltaIJ)+SM2.G.UdG*cos(SM2.G.DeltaIJ);
+SM2.G.IqG = SM2.G.iq*cos(SM2.G.DeltaIJ)+SM2.G.id*sin(SM2.G.DeltaIJ);
+SM2.G.IdG = SM2.G.id*cos(SM2.G.DeltaIJ)-SM2.G.iq*sin(SM2.G.DeltaIJ);
+[der(SM2.AVR.VoltageDeviation.x); SM2.AVR.VoltageDeviation.xn] = [
+SM2.AVR.VoltageDeviation.x1dot; SM2.AVR.VoltageDeviation.x];
+[SM2.AVR.VoltageDeviation.u] = transpose([SM2.AVR.VoltageDeviation.a])*[
+SM2.AVR.VoltageDeviation.x1dot; SM2.AVR.VoltageDeviation.x];
+[SM2.AVR.VoltageDeviation.y] = transpose([zeros(SM2.AVR.VoltageDeviation.na-
+SM2.AVR.VoltageDeviation.nb, 1); SM2.AVR.VoltageDeviation.b])*[SM2.AVR.VoltageDeviation.x1dot
+; SM2.AVR.VoltageDeviation.x];
+[der(SM2.AVR.VoltageDerivative.x); SM2.AVR.VoltageDerivative.xn] = [
+SM2.AVR.VoltageDerivative.x1dot; SM2.AVR.VoltageDerivative.x];
+[SM2.AVR.VoltageDerivative.u] = transpose([SM2.AVR.VoltageDerivative.a])*[
+SM2.AVR.VoltageDerivative.x1dot; SM2.AVR.VoltageDerivative.x];
+[SM2.AVR.VoltageDerivative.y] = transpose([zeros(SM2.AVR.VoltageDerivative.na-
+SM2.AVR.VoltageDerivative.nb, 1); SM2.AVR.VoltageDerivative.b])*[
+SM2.AVR.VoltageDerivative.x1dot; SM2.AVR.VoltageDerivative.x];
+[der(SM2.AVR.FrequencyBlockD.x); SM2.AVR.FrequencyBlockD.xn] = [SM2.AVR.FrequencyBlockD.x1dot
+; SM2.AVR.FrequencyBlockD.x];
+[SM2.AVR.FrequencyBlockD.u] = transpose([SM2.AVR.FrequencyBlockD.a])*[
+SM2.AVR.FrequencyBlockD.x1dot; SM2.AVR.FrequencyBlockD.x];
+[SM2.AVR.FrequencyBlockD.y] = transpose([zeros(SM2.AVR.FrequencyBlockD.na-
+SM2.AVR.FrequencyBlockD.nb, 1); SM2.AVR.FrequencyBlockD.b])*[SM2.AVR.FrequencyBlockD.x1dot
+; SM2.AVR.FrequencyBlockD.x];
+[der(SM2.AVR.FrequencyBlockU.x); SM2.AVR.FrequencyBlockU.xn] = [SM2.AVR.FrequencyBlockU.x1dot
+; SM2.AVR.FrequencyBlockU.x];
+[SM2.AVR.FrequencyBlockU.u] = transpose([SM2.AVR.FrequencyBlockU.a])*[
+SM2.AVR.FrequencyBlockU.x1dot; SM2.AVR.FrequencyBlockU.x];
+[SM2.AVR.FrequencyBlockU.y] = transpose([zeros(SM2.AVR.FrequencyBlockU.na-
+SM2.AVR.FrequencyBlockU.nb, 1); SM2.AVR.FrequencyBlockU.b])*[SM2.AVR.FrequencyBlockU.x1dot
+; SM2.AVR.FrequencyBlockU.x];
+[der(SM2.AVR.FrequencyDeviation.x); SM2.AVR.FrequencyDeviation.xn] = [
+SM2.AVR.FrequencyDeviation.x1dot; SM2.AVR.FrequencyDeviation.x];
+[SM2.AVR.FrequencyDeviation.u] = transpose([SM2.AVR.FrequencyDeviation.a])*[
+SM2.AVR.FrequencyDeviation.x1dot; SM2.AVR.FrequencyDeviation.x];
+[SM2.AVR.FrequencyDeviation.y] = transpose([zeros(SM2.AVR.FrequencyDeviation.na-
+SM2.AVR.FrequencyDeviation.nb, 1); SM2.AVR.FrequencyDeviation.b])*[
+SM2.AVR.FrequencyDeviation.x1dot; SM2.AVR.FrequencyDeviation.x];
+[der(SM2.AVR.FrequencyDerivative.x); SM2.AVR.FrequencyDerivative.xn] = [
+SM2.AVR.FrequencyDerivative.x1dot; SM2.AVR.FrequencyDerivative.x];
+[SM2.AVR.FrequencyDerivative.u] = transpose([SM2.AVR.FrequencyDerivative.a])*[
+SM2.AVR.FrequencyDerivative.x1dot; SM2.AVR.FrequencyDerivative.x];
+[SM2.AVR.FrequencyDerivative.y] = transpose([zeros(SM2.AVR.FrequencyDerivative.na
+-SM2.AVR.FrequencyDerivative.nb, 1); SM2.AVR.FrequencyDerivative.b])*[
+SM2.AVR.FrequencyDerivative.x1dot; SM2.AVR.FrequencyDerivative.x];
+[der(SM2.AVR.ExcitationCurrent.x); SM2.AVR.ExcitationCurrent.xn] = [
+SM2.AVR.ExcitationCurrent.x1dot; SM2.AVR.ExcitationCurrent.x];
+[SM2.AVR.ExcitationCurrent.u] = transpose([SM2.AVR.ExcitationCurrent.a])*[
+SM2.AVR.ExcitationCurrent.x1dot; SM2.AVR.ExcitationCurrent.x];
+[SM2.AVR.ExcitationCurrent.y] = transpose([zeros(SM2.AVR.ExcitationCurrent.na-
+SM2.AVR.ExcitationCurrent.nb, 1); SM2.AVR.ExcitationCurrent.b])*[
+SM2.AVR.ExcitationCurrent.x1dot; SM2.AVR.ExcitationCurrent.x];
+[der(SM2.AVR.SimpleExciter.x); SM2.AVR.SimpleExciter.xn] = [SM2.AVR.SimpleExciter.x1dot
+; SM2.AVR.SimpleExciter.x];
+[SM2.AVR.SimpleExciter.u] = transpose([SM2.AVR.SimpleExciter.a])*[
+SM2.AVR.SimpleExciter.x1dot; SM2.AVR.SimpleExciter.x];
+[SM2.AVR.SimpleExciter.y] = transpose([zeros(SM2.AVR.SimpleExciter.na-
+SM2.AVR.SimpleExciter.nb, 1); SM2.AVR.SimpleExciter.b])*[SM2.AVR.SimpleExciter.x1dot
+; SM2.AVR.SimpleExciter.x];
+when initial() then
+  reinit(SM2.AVR.FrequencyBlockU.x[1], SM2.AVR.DL0);
+end when;
+SM2.AVR.u_u = SM2.AVR.VoltageDeviation.u;
+SM2.AVR.u_pu = SM2.AVR.VoltageDerivative.u;
+SM2.AVR.u_fsys = SM2.AVR.FrequencyBlockD.u;
+SM2.AVR.u_fu = SM2.AVR.FrequencyBlockU.u;
+SM2.AVR.u_pIf = SM2.AVR.ExcitationCurrent.u;
+SM2.AVR.f_sum = SM2.AVR.FrequencyBlockD.y+SM2.AVR.FrequencyBlockU.y;
+SM2.AVR.FrequencyDeviation.u = SM2.AVR.f_sum;
+SM2.AVR.FrequencyDerivative.u = SM2.AVR.f_sum;
+SM2.AVR.VoltageDeviation.y+SM2.AVR.VoltageDerivative.y+SM2.AVR.ExcitationCurrent.y
++SM2.AVR.FrequencyDeviation.y+SM2.AVR.FrequencyDerivative.y = SM2.AVR.SimpleExciter.u
+;
+SM2.AVR.y_er = SM2.AVR.SimpleExciter.y;
+KZ1.id = if time >= KZ1.TkzOn and time < KZ1.TkzOn+KZ1.dTkzOn then KZ1.Bn*KZ1.Uq
+ else 0;
+KZ1.iq = if time >= KZ1.TkzOn and time < KZ1.TkzOn+KZ1.dTkzOn then  -KZ1.Bn*
+KZ1.Ud else 0;
+KZ2.id = if time >= KZ2.TkzOn and time < KZ2.TkzOn+KZ2.dTkzOn then KZ2.Bn*KZ2.Uq
+ else 0;
+KZ2.iq = if time >= KZ2.TkzOn and time < KZ2.TkzOn+KZ2.dTkzOn then  -KZ2.Bn*
+KZ2.Ud else 0;
+G1.G.IdG-L0102.I1d-KZ1.id = 0;
+G1.G.IqG-L0102.I1q-KZ1.iq = 0;
+SM2.G.IdG+L0102.I2d-KZ2.id = 0;
+SM2.G.IqG+L0102.I2q-KZ2.iq = 0;
+der(delta_G1_SM2) = G1.G.Wc*(G1.G.s-SM2.G.s);
+G1.G.DeltaIJ = 0;
+SM2.G.DeltaIJ = delta_G1_SM2;
+G1.G.Ssys = G1.G.s;
+SM2.G.Ssys = G1.G.s;
+G1.G.UqG = KZ1.Uq;
+G1.G.UdG = KZ1.Ud;
+L0102.U1q = KZ1.Uq;
+L0102.U1d = KZ1.Ud;
+SM2.G.UqG = KZ2.Uq;
+SM2.G.UdG = KZ2.Ud;
+L0102.U2q = KZ2.Uq;
+L0102.U2d = KZ2.Ud;
+L0102.Ssys = G1.G.s;
+G1.G.dWu = G1.AVR.u_fsys;
+G1.G.dWf = G1.AVR.u_fu;
+G1.G.dIf = G1.AVR.u_pIf;
+G1.AVR.u_u = G1.AVR.u_pu;
+G1.G.dUtr = G1.AVR.u_pu;
+G1.G.dEr = G1.AVR.y_er;
+SM2.G.dWu = SM2.AVR.u_fsys;
+SM2.G.dWf = SM2.AVR.u_fu;
+SM2.G.dIf = SM2.AVR.u_pIf;
+SM2.AVR.u_u = SM2.AVR.u_pu;
+SM2.G.dUtr = SM2.AVR.u_pu;
+SM2.G.dEr = SM2.AVR.y_er;
+
+end vankor11;
+/*Error: The types of the parts of 
+(G1.G.UqG)   <>   (0)
+are Real and Integer.
+Variable G1.G.UqG was declared in class SyncronousMachine, c:\wp\dymola\work\31_yurganov\06_arthur\qq\simple_auto_ggf_01.mo
+ at line 219, and used in component G1.G.
+Variables of type Real cannot be compared for equality.
+Accepting it*/
+/*Error: The types of the parts of 
+(SM2.G.UqG)   <>   (0)
+are Real and Integer.
+Variable SM2.G.UqG was declared in class SyncronousMachine, c:\wp\dymola\work\31_yurganov\06_arthur\qq\simple_auto_ggf_01.mo
+ at line 219, and used in component SM2.G.
+Variables of type Real cannot be compared for equality.
+Accepting it*/

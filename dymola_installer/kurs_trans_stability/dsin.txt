@@ -1,0 +1,3222 @@
+#1
+char Aclass(3,24)
+Adymosim
+1.4
+Modelica experiment file
+
+
+#    Experiment parameters
+double experiment(7,1)
+       0                   # StartTime    Time at which integration starts
+                           #              (and linearization and trimming time)
+      10                   # StopTime     Time at which integration stops
+       0                   # Increment    Communication step size, if > 0
+    5000                   # nInterval    Number of communication intervals, if > 0
+  1.000000000000000E-004   # Tolerance    Relative precision of signals for
+                           #              simulation, linearization and trimming
+       0                   # MaxFixedStep Maximum step size of fixed step size
+                           #              integrators, if > 0.0
+       8                   # Algorithm    Integration algorithm as integer (1...14)
+                           #
+                           #             | model|       |        | dense | state |
+                           # Algorithm   | typ  | stiff | order  | output| event |
+                           # ------------+------+-------+--------+-------+-------+
+                           #  1 | deabm  |  ode |   no  |  1-12  |  yes  |   no  |
+                           #  2 | lsode1 |  ode |   no  |  1-12  |  yes  |   no  |
+                           #  3 | lsode2 |  ode |  yes  |  1-5   |  yes  |   no  |
+                           #  4 | lsodar |  ode |  both |1-12,1-5|  yes  |  yes  |
+                           #  5 | dopri5 |  ode |   no  |   5    |   no  |   no  |
+                           #  6 | dopri8 |  ode |   no  |   8    |   no  |   no  |
+                           #  7 | grk4t  |  ode |  yes  |   4    |   no  |   no  |
+                           #  8 | dassl  |  dae |  yes  |  1-5   |  yes  |  yes  |
+                           #  9 | odassl | hdae |  yes  |  1-5   |  yes  |  yes  |
+                           # 10 | mexx   | hdae |   no  |  2-24  |   no  |   no  |
+                           # 11 | euler  |  ode |   no  |   1    |   no  |  yes  |
+                           # 12 | rkfix2 |  ode |   no  |   2    |   no  |  yes  |
+                           # 13 | rkfix3 |  ode |   no  |   3    |   no  |  yes  |
+                           # 14 | rkfix4 |  ode |   no  |   4    |   no  |  yes  |
+                           # ---+--------+------+-------+--------+-------+-------+
+                           # euler and rkfix have fixed stepsize.
+
+
+#    Method tuning parameters
+double method(27,1)
+       1                   # grid     type of communication time grid, defined by
+                           #          = 1: equidistant points ("Increment/nInterval")
+                           #          = 2: vector of grid points ("tgrid")
+                           #          = 3: variable step integrator (automatically)
+                           #          = 4: model (call of "increment" in Dymola, e.g.
+                           #                      incr=Time > 2 then 0 else 0.1
+                           #                      dummy=increment(incr))
+                           #          = 5: hardware clock (functions "udstimerXXX")
+                           #          grid = 1,3 is stopped by "StopTime"
+                           #          grid = 2   is stopped by "tgrid(last)"
+                           #          grid = 4   runs forever (stopped by model)
+                           #          grid = 5   runs forever (stopped by udstimerRun)
+       1                   # nt       Use every NT time instant, if grid = 3
+       3                   # dense    1/2/3 restart/step/interpolate GRID points
+       1                   # evgrid   0/1 do not/save event points in comm. time grid
+       1                   # evu      0/1 U-discontinuity does not/trigger events
+       0                   # evuord       U-discontinuity order to consider (0,1,...)
+       0                   # error    0/1/2 One message/warning/error messages
+       0                   # jac      0/1 Compute jacobian numerically/by BLOCKJ
+       0                   # xd0c     0/1 Compute/set XD0
+       0                   # f3       0/1 Ignore/use F3 of HDAE (= index 1)
+       0                   # f4       0/1 Ignore/use F4 of HDAE (= index 2)
+       0                   # f5       0/1 Ignore/use F5 of HDAE (= invar.)
+       0                   # debug    0/1 do not/print debug information
+     100                   # pdebug       priority of debug information (1...100)
+       0                   # fmax     Maximum number of evaluations of BLOCKF, if > 0
+       0                   # ordmax   Maximum allowed integration order, if > 0
+       0                   # hmax     Maximum absolute stepsize, if > 0
+       0                   # hmin     Minimum absolute stepsize, if > 0 (use with care!)
+       0                   # h0       Stepsize to be attempted on first step, if > 0
+  1.000000000000000E-014   # teps     Bound to check, if 2 equal time instants
+  1.000000000000000E-010   # eveps    Hysteresis epsilon at event points
+      20                   # eviter   Maximum number of event iterations
+  1.000000000000000E-006   # delaym   Minimum time increment in delay buffers
+       1                   # fexcep   0/1 floating exception crashes/stops dymosim
+       1                   # tscale   clock-time = tscale*simulation-time, if grid = 5
+                           #          > 1: simulation too slow
+                           #          = 1: simulation-time = real-time
+                           #          < 1: simulation too fast
+       1                   # shared   type of process communication, if grid = 5
+                           #          = 0: no communication,(single process without clock)
+                           #          = 1: no communication (single process with clock)
+                           #          = 2: shared memory (multiple processes with clock)
+    2473                   # memkey   key to be used for shared memory, if shared = 2
+
+
+#    Output parameters
+int settings(13,1)
+ 0                         # lprec    0/1 do not/store result data in double
+ 1                         # lx       0/1 do not/store x  (state variables)
+ 1                         # lxd      0/1 do not/store xd (derivative of states)
+ 0                         # lu       0/1 do not/store u  (input     signals)
+ 1                         # ly       0/1 do not/store y  (output    signals)
+ 0                         # lz       0/1 do not/store z  (indicator signals)
+ 1                         # lw       0/1 do not/store w  (auxiliary signals)
+ 1                         # la       0/1 do not/store a  (alias     signals)
+ 0                         # lperf    0/1 do not/store performance indicators
+ 0                         # levent   0/1 do not/store event point
+ 1                         # lres     0/1 do not/store results on result file
+ 0                         # lshare   0/1 do not/store info data for shared memory on dsshare.txt
+ 1                         # lform    0/1 ASCII/Matlab-binary storage format of results
+                           #              (for simulation/linearization; not for trimming)
+
+
+#    Names of initial variables
+char initialName(1019,36)
+TregMax
+G1.G.TgenOff
+G1.G.dTgenOff
+G1.G.Pg
+G1.G.Qg
+G1.G.Ut
+G1.G.Xd
+G1.G.Xq
+G1.G.Xs
+G1.G.X1d
+G1.G.X2d
+G1.G.X2q
+G1.G.Rf
+G1.G.R1d
+G1.G.R1q
+G1.G.Tj
+G1.G.Sigma
+G1.G.TauC
+G1.AVR.K0u
+G1.AVR.K1u
+G1.AVR.K0w
+G1.AVR.K1w
+G1.AVR.K1if
+G1.AVR.DL0
+G1.AVR.FrequencyBlockD.b[1]
+G1.AVR.FrequencyBlockU.b[1]
+G1.AVR.FrequencyBlockU.b[2]
+G1.AVR.SimpleExciter.b[1]
+G2.G.TgenOff
+G2.G.dTgenOff
+G2.G.Pg
+G2.G.Qg
+G2.G.Ut
+G2.G.Xd
+G2.G.Xq
+G2.G.Xs
+G2.G.X1d
+G2.G.X2d
+G2.G.X2q
+G2.G.Rf
+G2.G.R1d
+G2.G.R1q
+G2.G.Tj
+G2.G.Sigma
+G2.G.TauC
+G2.AVR.K0u
+G2.AVR.K1u
+G2.AVR.K0w
+G2.AVR.K1w
+G2.AVR.K1if
+G2.AVR.DL0
+G2.AVR.FrequencyBlockD.b[1]
+G2.AVR.FrequencyBlockU.b[1]
+G2.AVR.FrequencyBlockU.b[2]
+G2.AVR.SimpleExciter.b[1]
+G3.G.TgenOff
+G3.G.dTgenOff
+G3.G.Pg
+G3.G.Qg
+G3.G.Ut
+G3.G.Xd
+G3.G.Xq
+G3.G.Xs
+G3.G.X1d
+G3.G.X2d
+G3.G.X2q
+G3.G.Rf
+G3.G.R1d
+G3.G.R1q
+G3.G.Tj
+G3.G.Sigma
+G3.G.TauC
+G3.AVR.K0u
+G3.AVR.K1u
+G3.AVR.K0w
+G3.AVR.K1w
+G3.AVR.K1if
+G3.AVR.DL0
+G3.AVR.FrequencyBlockD.b[1]
+G3.AVR.FrequencyBlockU.b[1]
+G3.AVR.FrequencyBlockU.b[2]
+G3.AVR.SimpleExciter.b[1]
+T_G1.Rline
+T_G1.Xline
+T_G1.TtOff
+T_G1.dTtOff
+T_G2.Rline
+T_G2.Xline
+T_G2.TtOff
+T_G2.dTtOff
+T1.Rline
+T1.Xline
+T1.TtOff
+T1.dTtOff
+T2_HV.Rline
+T2_HV.Xline
+T2_HV.TtOff
+T2_HV.dTtOff
+T2_MV.Rline
+T2_MV.Xline
+T2_MV.TtOff
+T2_MV.dTtOff
+T2_LV.Rline
+T2_LV.Xline
+T2_LV.TtOff
+T2_LV.dTtOff
+T3.Rline
+T3.Xline
+T3.TtOff
+T3.dTtOff
+AT_HV.Rline
+AT_HV.Xline
+AT_HV.TtOff
+AT_HV.dTtOff
+AT_MV.Rline
+AT_MV.Xline
+AT_MV.TtOff
+AT_MV.dTtOff
+AT_LV.Rline
+AT_LV.Xline
+AT_LV.TtOff
+AT_LV.dTtOff
+L1.Rline
+L1.Xline
+L1.Bline
+L1.TLineOff
+L1.dTLineOff
+L2.Rline
+L2.Xline
+L2.Bline
+L2.TLineOff
+L2.dTLineOff
+L3.Rline
+L3.Xline
+L3.Bline
+L3.TLineOff
+L3.dTLineOff
+L4.Rline
+L4.Xline
+L4.Bline
+L4.TLineOff
+L4.dTLineOff
+L5.Rline
+L5.Xline
+L5.Bline
+L5.TLineOff
+L5.dTLineOff
+L6.Rline
+L6.Xline
+L6.Bline
+L6.TLineOff
+L6.dTLineOff
+N1.Gn
+N1.Bn
+N1.TloadOff
+N1.dTloadOff
+N2.Gn
+N2.Bn
+N2.TloadOff
+N2.dTloadOff
+N3.Gn
+N3.Bn
+N3.TloadOff
+N3.dTloadOff
+N4.Gn
+N4.Bn
+N4.TloadOff
+N4.dTloadOff
+KZ01.Bn
+KZ01.TkzOn
+KZ01.dTkzOn
+KZ02.Bn
+KZ02.TkzOn
+KZ02.dTkzOn
+KZ03.Bn
+KZ03.TkzOn
+KZ03.dTkzOn
+KZ04.Bn
+KZ04.TkzOn
+KZ04.dTkzOn
+KZ05.Bn
+KZ05.TkzOn
+KZ05.dTkzOn
+KZ06.Bn
+KZ06.TkzOn
+KZ06.dTkzOn
+KZ07.Bn
+KZ07.TkzOn
+KZ07.dTkzOn
+KZ08.Bn
+KZ08.TkzOn
+KZ08.dTkzOn
+KZ09.Bn
+KZ09.TkzOn
+KZ09.dTkzOn
+KZ10.Bn
+KZ10.TkzOn
+KZ10.dTkzOn
+KZ11.Bn
+KZ11.TkzOn
+KZ11.dTkzOn
+KZ12.Bn
+KZ12.TkzOn
+KZ12.dTkzOn
+KZ13.Bn
+KZ13.TkzOn
+KZ13.dTkzOn
+KZ14.Bn
+KZ14.TkzOn
+KZ14.dTkzOn
+KZ15.Bn
+KZ15.TkzOn
+KZ15.dTkzOn
+KZ16.Bn
+KZ16.TkzOn
+KZ16.dTkzOn
+G1.G.Mu
+G1.G.Yr
+G1.G.Yrd
+G1.G.Yrq
+G1.G.s
+G1.G.DGi
+G1.AVR.VoltageDeviation.x[1]
+G1.AVR.VoltageDerivative.x[1]
+G1.AVR.FrequencyBlockD.x[1]
+G1.AVR.FrequencyBlockU.x[1]
+G1.AVR.FrequencyDeviation.x[1]
+G1.AVR.FrequencyDerivative.x[1]
+G1.AVR.ExcitationCurrent.x[1]
+G1.AVR.SimpleExciter.x[1]
+G2.G.Mu
+G2.G.Yr
+G2.G.Yrd
+G2.G.Yrq
+G2.G.s
+G2.G.DGi
+G2.AVR.VoltageDeviation.x[1]
+G2.AVR.VoltageDerivative.x[1]
+G2.AVR.FrequencyBlockD.x[1]
+G2.AVR.FrequencyBlockU.x[1]
+G2.AVR.FrequencyDeviation.x[1]
+G2.AVR.FrequencyDerivative.x[1]
+G2.AVR.ExcitationCurrent.x[1]
+G2.AVR.SimpleExciter.x[1]
+G3.G.Mu
+G3.G.Yr
+G3.G.Yrd
+G3.G.Yrq
+G3.G.s
+G3.G.DGi
+G3.AVR.VoltageDeviation.x[1]
+G3.AVR.VoltageDerivative.x[1]
+G3.AVR.FrequencyBlockD.x[1]
+G3.AVR.FrequencyBlockU.x[1]
+G3.AVR.FrequencyDeviation.x[1]
+G3.AVR.FrequencyDerivative.x[1]
+G3.AVR.ExcitationCurrent.x[1]
+G3.AVR.SimpleExciter.x[1]
+delta_G1_G2
+delta_G1_G3
+delta_G2_G3
+G1.G.der(Mu)
+G1.G.der(Yr)
+G1.G.der(Yrd)
+G1.G.der(Yrq)
+G1.G.der(s)
+G1.G.der(DGi)
+G1.AVR.VoltageDeviation.der(x[1])
+G1.AVR.VoltageDerivative.der(x[1])
+G1.AVR.FrequencyBlockD.der(x[1])
+G1.AVR.FrequencyBlockU.der(x[1])
+G1.AVR.FrequencyDeviation.der(x[1])
+G1.AVR.FrequencyDerivative.der(x[1])
+G1.AVR.ExcitationCurrent.der(x[1])
+G1.AVR.SimpleExciter.der(x[1])
+G2.G.der(Mu)
+G2.G.der(Yr)
+G2.G.der(Yrd)
+G2.G.der(Yrq)
+G2.G.der(s)
+G2.G.der(DGi)
+G2.AVR.VoltageDeviation.der(x[1])
+G2.AVR.VoltageDerivative.der(x[1])
+G2.AVR.FrequencyBlockD.der(x[1])
+G2.AVR.FrequencyBlockU.der(x[1])
+G2.AVR.FrequencyDeviation.der(x[1])
+G2.AVR.FrequencyDerivative.der(x[1])
+G2.AVR.ExcitationCurrent.der(x[1])
+G2.AVR.SimpleExciter.der(x[1])
+G3.G.der(Mu)
+G3.G.der(Yr)
+G3.G.der(Yrd)
+G3.G.der(Yrq)
+G3.G.der(s)
+G3.G.der(DGi)
+G3.AVR.VoltageDeviation.der(x[1])
+G3.AVR.VoltageDerivative.der(x[1])
+G3.AVR.FrequencyBlockD.der(x[1])
+G3.AVR.FrequencyBlockU.der(x[1])
+G3.AVR.FrequencyDeviation.der(x[1])
+G3.AVR.FrequencyDerivative.der(x[1])
+G3.AVR.ExcitationCurrent.der(x[1])
+G3.AVR.SimpleExciter.der(x[1])
+der(delta_G1_G2)
+der(delta_G1_G3)
+der(delta_G2_G3)
+G1.G.Xt
+G1.G.dEr
+G1.G.PI
+G1.G.Wc
+G1.G.Ra
+G1.G.Rt
+G1.G.Mtmax
+G1.G.EQ
+G1.G.Dg
+G1.G.Uq
+G1.G.Ud
+G1.G.Id
+G1.G.Iq
+G1.G.Mt
+G1.G.Eiq
+G1.G.Ir
+G1.G.Uf
+G1.G.Eq
+G1.G.Er0
+G1.G.PsiR
+G1.G.PsiRD
+G1.G.PsiRQ
+G1.G.Er_max
+G1.G.Er_min
+G1.G.Uf_full
+G1.G.Xad
+G1.G.Xaq
+G1.G.X2dt
+G1.G.X2qt
+G1.G.Rs
+G1.G.Xsf
+G1.G.Xs1d
+G1.G.Xs1q
+G1.G.X1
+G1.G.X2
+G1.G.X3
+G1.G.Ugen
+G1.G.Mu0
+G1.G.Ro
+G1.G.Mt_pp
+G1.G.Pgen
+G1.G.Qgen
+G1.G.UdG
+G1.G.UqG
+G1.G.DeltaIJ
+G1.G.Tregmax
+G1.G.Me
+G1.G.Yad
+G1.G.Yaq
+G1.G.iq
+G1.G.id
+G1.G.ir
+G1.G.ird
+G1.G.irq
+G1.G.E11d
+G1.G.E11q
+G1.AVR.Tokp
+G1.AVR.T0u
+G1.AVR.T1u
+G1.AVR.Tfb
+G1.AVR.T0w
+G1.AVR.T1w
+G1.AVR.T1if
+G1.AVR.VoltageDeviation.b[1]
+G1.AVR.VoltageDeviation.a[1]
+G1.AVR.VoltageDeviation.a[2]
+G1.AVR.VoltageDeviation.na
+G1.AVR.VoltageDeviation.nb
+G1.AVR.VoltageDeviation.nx
+G1.AVR.VoltageDeviation.u
+G1.AVR.VoltageDeviation.y
+G1.AVR.VoltageDerivative.b[1]
+G1.AVR.VoltageDerivative.b[2]
+G1.AVR.VoltageDerivative.a[1]
+G1.AVR.VoltageDerivative.a[2]
+G1.AVR.VoltageDerivative.na
+G1.AVR.VoltageDerivative.nb
+G1.AVR.VoltageDerivative.nx
+G1.AVR.VoltageDerivative.y
+G1.AVR.FrequencyBlockD.a[1]
+G1.AVR.FrequencyBlockD.a[2]
+G1.AVR.FrequencyBlockD.na
+G1.AVR.FrequencyBlockD.nb
+G1.AVR.FrequencyBlockD.nx
+G1.AVR.FrequencyBlockD.u
+G1.AVR.FrequencyBlockD.y
+G1.AVR.FrequencyBlockU.a[1]
+G1.AVR.FrequencyBlockU.a[2]
+G1.AVR.FrequencyBlockU.na
+G1.AVR.FrequencyBlockU.nb
+G1.AVR.FrequencyBlockU.nx
+G1.AVR.FrequencyBlockU.u
+G1.AVR.FrequencyBlockU.y
+G1.AVR.FrequencyDeviation.b[1]
+G1.AVR.FrequencyDeviation.b[2]
+G1.AVR.FrequencyDeviation.a[1]
+G1.AVR.FrequencyDeviation.a[2]
+G1.AVR.FrequencyDeviation.na
+G1.AVR.FrequencyDeviation.nb
+G1.AVR.FrequencyDeviation.nx
+G1.AVR.FrequencyDeviation.u
+G1.AVR.FrequencyDeviation.y
+G1.AVR.FrequencyDerivative.b[1]
+G1.AVR.FrequencyDerivative.b[2]
+G1.AVR.FrequencyDerivative.a[1]
+G1.AVR.FrequencyDerivative.a[2]
+G1.AVR.FrequencyDerivative.na
+G1.AVR.FrequencyDerivative.nb
+G1.AVR.FrequencyDerivative.nx
+G1.AVR.FrequencyDerivative.y
+G1.AVR.ExcitationCurrent.b[1]
+G1.AVR.ExcitationCurrent.b[2]
+G1.AVR.ExcitationCurrent.a[1]
+G1.AVR.ExcitationCurrent.a[2]
+G1.AVR.ExcitationCurrent.na
+G1.AVR.ExcitationCurrent.nb
+G1.AVR.ExcitationCurrent.nx
+G1.AVR.ExcitationCurrent.u
+G1.AVR.ExcitationCurrent.y
+G1.AVR.SimpleExciter.a[1]
+G1.AVR.SimpleExciter.a[2]
+G1.AVR.SimpleExciter.na
+G1.AVR.SimpleExciter.nb
+G1.AVR.SimpleExciter.nx
+G1.AVR.SimpleExciter.u
+G2.G.Xt
+G2.G.dEr
+G2.G.PI
+G2.G.Wc
+G2.G.Ra
+G2.G.Rt
+G2.G.Mtmax
+G2.G.EQ
+G2.G.Dg
+G2.G.Uq
+G2.G.Ud
+G2.G.Id
+G2.G.Iq
+G2.G.Mt
+G2.G.Eiq
+G2.G.Ir
+G2.G.Uf
+G2.G.Eq
+G2.G.Er0
+G2.G.PsiR
+G2.G.PsiRD
+G2.G.PsiRQ
+G2.G.Er_max
+G2.G.Er_min
+G2.G.Uf_full
+G2.G.Xad
+G2.G.Xaq
+G2.G.X2dt
+G2.G.X2qt
+G2.G.Rs
+G2.G.Xsf
+G2.G.Xs1d
+G2.G.Xs1q
+G2.G.X1
+G2.G.X2
+G2.G.X3
+G2.G.Ugen
+G2.G.Mu0
+G2.G.Ro
+G2.G.Mt_pp
+G2.G.Pgen
+G2.G.Qgen
+G2.G.UdG
+G2.G.UqG
+G2.G.IdG
+G2.G.IqG
+G2.G.Tregmax
+G2.G.Me
+G2.G.Yad
+G2.G.Yaq
+G2.G.iq
+G2.G.id
+G2.G.ir
+G2.G.ird
+G2.G.irq
+G2.G.ud
+G2.G.uq
+G2.G.E11d
+G2.G.E11q
+G2.AVR.Tokp
+G2.AVR.T0u
+G2.AVR.T1u
+G2.AVR.Tfb
+G2.AVR.T0w
+G2.AVR.T1w
+G2.AVR.T1if
+G2.AVR.VoltageDeviation.b[1]
+G2.AVR.VoltageDeviation.a[1]
+G2.AVR.VoltageDeviation.a[2]
+G2.AVR.VoltageDeviation.na
+G2.AVR.VoltageDeviation.nb
+G2.AVR.VoltageDeviation.nx
+G2.AVR.VoltageDeviation.u
+G2.AVR.VoltageDeviation.y
+G2.AVR.VoltageDerivative.b[1]
+G2.AVR.VoltageDerivative.b[2]
+G2.AVR.VoltageDerivative.a[1]
+G2.AVR.VoltageDerivative.a[2]
+G2.AVR.VoltageDerivative.na
+G2.AVR.VoltageDerivative.nb
+G2.AVR.VoltageDerivative.nx
+G2.AVR.VoltageDerivative.y
+G2.AVR.FrequencyBlockD.a[1]
+G2.AVR.FrequencyBlockD.a[2]
+G2.AVR.FrequencyBlockD.na
+G2.AVR.FrequencyBlockD.nb
+G2.AVR.FrequencyBlockD.nx
+G2.AVR.FrequencyBlockD.u
+G2.AVR.FrequencyBlockD.y
+G2.AVR.FrequencyBlockU.a[1]
+G2.AVR.FrequencyBlockU.a[2]
+G2.AVR.FrequencyBlockU.na
+G2.AVR.FrequencyBlockU.nb
+G2.AVR.FrequencyBlockU.nx
+G2.AVR.FrequencyBlockU.u
+G2.AVR.FrequencyBlockU.y
+G2.AVR.FrequencyDeviation.b[1]
+G2.AVR.FrequencyDeviation.b[2]
+G2.AVR.FrequencyDeviation.a[1]
+G2.AVR.FrequencyDeviation.a[2]
+G2.AVR.FrequencyDeviation.na
+G2.AVR.FrequencyDeviation.nb
+G2.AVR.FrequencyDeviation.nx
+G2.AVR.FrequencyDeviation.u
+G2.AVR.FrequencyDeviation.y
+G2.AVR.FrequencyDerivative.b[1]
+G2.AVR.FrequencyDerivative.b[2]
+G2.AVR.FrequencyDerivative.a[1]
+G2.AVR.FrequencyDerivative.a[2]
+G2.AVR.FrequencyDerivative.na
+G2.AVR.FrequencyDerivative.nb
+G2.AVR.FrequencyDerivative.nx
+G2.AVR.FrequencyDerivative.y
+G2.AVR.ExcitationCurrent.b[1]
+G2.AVR.ExcitationCurrent.b[2]
+G2.AVR.ExcitationCurrent.a[1]
+G2.AVR.ExcitationCurrent.a[2]
+G2.AVR.ExcitationCurrent.na
+G2.AVR.ExcitationCurrent.nb
+G2.AVR.ExcitationCurrent.nx
+G2.AVR.ExcitationCurrent.u
+G2.AVR.ExcitationCurrent.y
+G2.AVR.SimpleExciter.a[1]
+G2.AVR.SimpleExciter.a[2]
+G2.AVR.SimpleExciter.na
+G2.AVR.SimpleExciter.nb
+G2.AVR.SimpleExciter.nx
+G2.AVR.SimpleExciter.u
+G3.G.Xt
+G3.G.dEr
+G3.G.PI
+G3.G.Wc
+G3.G.Ra
+G3.G.Rt
+G3.G.Mtmax
+G3.G.EQ
+G3.G.Dg
+G3.G.Uq
+G3.G.Ud
+G3.G.Id
+G3.G.Iq
+G3.G.Mt
+G3.G.Eiq
+G3.G.Ir
+G3.G.Uf
+G3.G.Eq
+G3.G.Er0
+G3.G.PsiR
+G3.G.PsiRD
+G3.G.PsiRQ
+G3.G.Er_max
+G3.G.Er_min
+G3.G.Uf_full
+G3.G.Xad
+G3.G.Xaq
+G3.G.X2dt
+G3.G.X2qt
+G3.G.Rs
+G3.G.Xsf
+G3.G.Xs1d
+G3.G.Xs1q
+G3.G.X1
+G3.G.X2
+G3.G.X3
+G3.G.Ugen
+G3.G.Mu0
+G3.G.Ro
+G3.G.Mt_pp
+G3.G.Pgen
+G3.G.Qgen
+G3.G.UdG
+G3.G.UqG
+G3.G.IdG
+G3.G.IqG
+G3.G.Tregmax
+G3.G.Me
+G3.G.Yad
+G3.G.Yaq
+G3.G.iq
+G3.G.id
+G3.G.ir
+G3.G.ird
+G3.G.irq
+G3.G.ud
+G3.G.uq
+G3.G.E11d
+G3.G.E11q
+G3.AVR.Tokp
+G3.AVR.T0u
+G3.AVR.T1u
+G3.AVR.Tfb
+G3.AVR.T0w
+G3.AVR.T1w
+G3.AVR.T1if
+G3.AVR.VoltageDeviation.b[1]
+G3.AVR.VoltageDeviation.a[1]
+G3.AVR.VoltageDeviation.a[2]
+G3.AVR.VoltageDeviation.na
+G3.AVR.VoltageDeviation.nb
+G3.AVR.VoltageDeviation.nx
+G3.AVR.VoltageDeviation.u
+G3.AVR.VoltageDeviation.y
+G3.AVR.VoltageDerivative.b[1]
+G3.AVR.VoltageDerivative.b[2]
+G3.AVR.VoltageDerivative.a[1]
+G3.AVR.VoltageDerivative.a[2]
+G3.AVR.VoltageDerivative.na
+G3.AVR.VoltageDerivative.nb
+G3.AVR.VoltageDerivative.nx
+G3.AVR.VoltageDerivative.y
+G3.AVR.FrequencyBlockD.a[1]
+G3.AVR.FrequencyBlockD.a[2]
+G3.AVR.FrequencyBlockD.na
+G3.AVR.FrequencyBlockD.nb
+G3.AVR.FrequencyBlockD.nx
+G3.AVR.FrequencyBlockD.u
+G3.AVR.FrequencyBlockD.y
+G3.AVR.FrequencyBlockU.a[1]
+G3.AVR.FrequencyBlockU.a[2]
+G3.AVR.FrequencyBlockU.na
+G3.AVR.FrequencyBlockU.nb
+G3.AVR.FrequencyBlockU.nx
+G3.AVR.FrequencyBlockU.u
+G3.AVR.FrequencyBlockU.y
+G3.AVR.FrequencyDeviation.b[1]
+G3.AVR.FrequencyDeviation.b[2]
+G3.AVR.FrequencyDeviation.a[1]
+G3.AVR.FrequencyDeviation.a[2]
+G3.AVR.FrequencyDeviation.na
+G3.AVR.FrequencyDeviation.nb
+G3.AVR.FrequencyDeviation.nx
+G3.AVR.FrequencyDeviation.u
+G3.AVR.FrequencyDeviation.y
+G3.AVR.FrequencyDerivative.b[1]
+G3.AVR.FrequencyDerivative.b[2]
+G3.AVR.FrequencyDerivative.a[1]
+G3.AVR.FrequencyDerivative.a[2]
+G3.AVR.FrequencyDerivative.na
+G3.AVR.FrequencyDerivative.nb
+G3.AVR.FrequencyDerivative.nx
+G3.AVR.FrequencyDerivative.y
+G3.AVR.ExcitationCurrent.b[1]
+G3.AVR.ExcitationCurrent.b[2]
+G3.AVR.ExcitationCurrent.a[1]
+G3.AVR.ExcitationCurrent.a[2]
+G3.AVR.ExcitationCurrent.na
+G3.AVR.ExcitationCurrent.nb
+G3.AVR.ExcitationCurrent.nx
+G3.AVR.ExcitationCurrent.u
+G3.AVR.ExcitationCurrent.y
+G3.AVR.SimpleExciter.a[1]
+G3.AVR.SimpleExciter.a[2]
+G3.AVR.SimpleExciter.na
+G3.AVR.SimpleExciter.nb
+G3.AVR.SimpleExciter.nx
+G3.AVR.SimpleExciter.u
+T_G1.I12d
+T_G1.I12q
+T_G1.I12m
+T_G1.U1m
+T_G1.U2m
+T_G1.P1
+T_G1.Q1
+T_G1.P2
+T_G1.Q2
+T_G1.RL
+T_G1.XL
+T_G2.I12d
+T_G2.I12q
+T_G2.I12m
+T_G2.U1m
+T_G2.U2m
+T_G2.P1
+T_G2.Q1
+T_G2.P2
+T_G2.Q2
+T_G2.RL
+T_G2.XL
+T1.U2d
+T1.U2q
+T1.I12d
+T1.I12q
+T1.I12m
+T1.U1m
+T1.U2m
+T1.P1
+T1.Q1
+T1.P2
+T1.Q2
+T1.RL
+T1.XL
+T2_HV.U2d
+T2_HV.U2q
+T2_HV.I12d
+T2_HV.I12q
+T2_HV.I12m
+T2_HV.U1m
+T2_HV.U2m
+T2_HV.P1
+T2_HV.Q1
+T2_HV.P2
+T2_HV.Q2
+T2_HV.RL
+T2_HV.XL
+T2_MV.I12d
+T2_MV.I12q
+T2_MV.I12m
+T2_MV.U1m
+T2_MV.U2m
+T2_MV.P1
+T2_MV.Q1
+T2_MV.P2
+T2_MV.Q2
+T2_MV.RL
+T2_MV.XL
+T2_LV.U2d
+T2_LV.U2q
+T2_LV.I12d
+T2_LV.I12q
+T2_LV.I12m
+T2_LV.U1m
+T2_LV.U2m
+T2_LV.P1
+T2_LV.Q1
+T2_LV.P2
+T2_LV.Q2
+T2_LV.RL
+T2_LV.XL
+T3.U2d
+T3.U2q
+T3.I12d
+T3.I12q
+T3.I12m
+T3.U1m
+T3.U2m
+T3.P1
+T3.Q1
+T3.P2
+T3.Q2
+T3.RL
+T3.XL
+AT_HV.U2d
+AT_HV.U2q
+AT_HV.I12d
+AT_HV.I12q
+AT_HV.I12m
+AT_HV.U1m
+AT_HV.U2m
+AT_HV.P1
+AT_HV.Q1
+AT_HV.P2
+AT_HV.Q2
+AT_HV.RL
+AT_HV.XL
+AT_MV.I12d
+AT_MV.I12q
+AT_MV.I12m
+AT_MV.U1m
+AT_MV.U2m
+AT_MV.P1
+AT_MV.Q1
+AT_MV.P2
+AT_MV.Q2
+AT_MV.RL
+AT_MV.XL
+AT_LV.U2d
+AT_LV.U2q
+AT_LV.I12d
+AT_LV.I12q
+AT_LV.I12m
+AT_LV.U1m
+AT_LV.U2m
+AT_LV.P1
+AT_LV.Q1
+AT_LV.P2
+AT_LV.Q2
+AT_LV.RL
+AT_LV.XL
+L1.U1d
+L1.U1q
+L1.U2d
+L1.U2q
+L1.I12d
+L1.I12q
+L1.I12m
+L1.U1m
+L1.U2m
+L1.I1d
+L1.I1q
+L1.I2d
+L1.I2q
+L1.Idc1
+L1.Iqc1
+L1.Idc2
+L1.Iqc2
+L1.DU1
+L1.DU2
+L1.Bnn
+L1.P1
+L1.Q1
+L1.P2
+L1.Q2
+L1.RL
+L1.XL
+L2.U1d
+L2.U1q
+L2.U2d
+L2.U2q
+L2.I12d
+L2.I12q
+L2.I12m
+L2.U1m
+L2.U2m
+L2.I1d
+L2.I1q
+L2.I2d
+L2.I2q
+L2.Idc1
+L2.Iqc1
+L2.Idc2
+L2.Iqc2
+L2.DU1
+L2.DU2
+L2.Bnn
+L2.P1
+L2.Q1
+L2.P2
+L2.Q2
+L2.RL
+L2.XL
+L3.U2d
+L3.U2q
+L3.I12d
+L3.I12q
+L3.I12m
+L3.U1m
+L3.U2m
+L3.I1d
+L3.I1q
+L3.I2d
+L3.I2q
+L3.Idc1
+L3.Iqc1
+L3.Idc2
+L3.Iqc2
+L3.DU1
+L3.DU2
+L3.Bnn
+L3.P1
+L3.Q1
+L3.P2
+L3.Q2
+L3.RL
+L3.XL
+L4.U2d
+L4.U2q
+L4.I12d
+L4.I12q
+L4.I12m
+L4.U1m
+L4.U2m
+L4.I1d
+L4.I1q
+L4.I2d
+L4.I2q
+L4.Idc1
+L4.Iqc1
+L4.Idc2
+L4.Iqc2
+L4.DU1
+L4.DU2
+L4.Bnn
+L4.P1
+L4.Q1
+L4.P2
+L4.Q2
+L4.RL
+L4.XL
+L5.I12d
+L5.I12q
+L5.I12m
+L5.U1m
+L5.U2m
+L5.I1d
+L5.I1q
+L5.I2d
+L5.I2q
+L5.Idc1
+L5.Iqc1
+L5.Idc2
+L5.Iqc2
+L5.DU1
+L5.DU2
+L5.Bnn
+L5.P1
+L5.Q1
+L5.P2
+L5.Q2
+L5.RL
+L5.XL
+L6.U1d
+L6.U1q
+L6.I12d
+L6.I12q
+L6.I12m
+L6.U1m
+L6.U2m
+L6.I1d
+L6.I1q
+L6.I2d
+L6.I2q
+L6.Idc1
+L6.Iqc1
+L6.Idc2
+L6.Iqc2
+L6.DU1
+L6.DU2
+L6.Bnn
+L6.P1
+L6.Q1
+L6.P2
+L6.Q2
+L6.RL
+L6.XL
+N1.Iqn
+N1.Idn
+N1.Pn
+N1.Qn
+N1.R0
+N1.X0
+N1.Gnn
+N1.Bnn
+N2.Iqn
+N2.Idn
+N2.Pn
+N2.Qn
+N2.R0
+N2.X0
+N2.Gnn
+N2.Bnn
+N3.Iqn
+N3.Idn
+N3.Pn
+N3.Qn
+N3.R0
+N3.X0
+N3.Gnn
+N3.Bnn
+N4.Iqn
+N4.Idn
+N4.Pn
+N4.Qn
+N4.R0
+N4.X0
+N4.Gnn
+N4.Bnn
+KZ01.id
+KZ01.iq
+KZ02.id
+KZ02.iq
+KZ03.id
+KZ03.iq
+KZ04.id
+KZ04.iq
+KZ05.id
+KZ05.iq
+KZ06.id
+KZ06.iq
+KZ07.id
+KZ07.iq
+KZ08.id
+KZ08.iq
+KZ09.id
+KZ09.iq
+KZ10.id
+KZ10.iq
+KZ11.id
+KZ11.iq
+KZ12.id
+KZ12.iq
+KZ13.id
+KZ13.iq
+KZ14.id
+KZ14.iq
+KZ15.id
+KZ15.iq
+KZ16.id
+KZ16.iq
+
+double initialValue(1019,6)
+ -1      50                  0  0  1  0   # TregMax
+ -1    1000                  0  0  1  0   # G1.G.TgenOff
+ -1      10                  0  0  1  0   # G1.G.dTgenOff
+ -1  8.500000000000000E-001  0  0  1  0   # G1.G.Pg
+ -1  5.270000000000000E-001  0  0  1  0   # G1.G.Qg
+ -1       1                  0  0  1  0   # G1.G.Ut
+ -1  1.869000000000000E+000  0  0  1  0   # G1.G.Xd
+ -1  1.869000000000000E+000  0  0  1  0   # G1.G.Xq
+ -1  1.940000000000000E-001  0  0  1  0   # G1.G.Xs
+ -1  3.016000000000000E-001  0  0  1  0   # G1.G.X1d
+ -1  2.337000000000000E-001  0  0  1  0   # G1.G.X2d
+ -1  2.337000000000000E-001  0  0  1  0   # G1.G.X2q
+ -1  9.040000000000000E-004  0  0  1  0   # G1.G.Rf
+ -1  3.688000000000000E-003  0  0  1  0   # G1.G.R1d
+ -1  2.770000000000000E-003  0  0  1  0   # G1.G.R1q
+ -1       7                  0  0  1  0   # G1.G.Tj
+ -1  4.750000000000000E-002  0  0  1  0   # G1.G.Sigma
+ -1  8.000000000000000E-001  0  0  1  0   # G1.G.TauC
+ -1     -10                  0  0  1  0   # G1.AVR.K0u
+ -1       0                  0  0  1  0   # G1.AVR.K1u
+ -1       0                  0  0  1  0   # G1.AVR.K0w
+ -1       0                  0  0  1  0   # G1.AVR.K1w
+ -1       0                  0  0  1  0   # G1.AVR.K1if
+ -1       0                  0  0  1  0   # G1.AVR.DL0
+ -1       1                  0  0  1  0   # G1.AVR.FrequencyBlockD.b[1]
+ -1       1                  0  0  1  0   # G1.AVR.FrequencyBlockU.b[1]
+ -1       0                  0  0  1  0   # G1.AVR.FrequencyBlockU.b[2]
+ -1       1                  0  0  1  0   # G1.AVR.SimpleExciter.b[1]
+ -1    1000                  0  0  1  0   # G2.G.TgenOff
+ -1      10                  0  0  1  0   # G2.G.dTgenOff
+ -1  8.500000000000000E-001  0  0  1  0   # G2.G.Pg
+ -1  5.270000000000000E-001  0  0  1  0   # G2.G.Qg
+ -1       1                  0  0  1  0   # G2.G.Ut
+ -1  1.869000000000000E+000  0  0  1  0   # G2.G.Xd
+ -1  1.869000000000000E+000  0  0  1  0   # G2.G.Xq
+ -1  1.940000000000000E-001  0  0  1  0   # G2.G.Xs
+ -1  3.016000000000000E-001  0  0  1  0   # G2.G.X1d
+ -1  2.337000000000000E-001  0  0  1  0   # G2.G.X2d
+ -1  2.337000000000000E-001  0  0  1  0   # G2.G.X2q
+ -1  9.040000000000000E-004  0  0  1  0   # G2.G.Rf
+ -1  3.688000000000000E-003  0  0  1  0   # G2.G.R1d
+ -1  2.770000000000000E-003  0  0  1  0   # G2.G.R1q
+ -1       7                  0  0  1  0   # G2.G.Tj
+ -1  4.750000000000000E-002  0  0  1  0   # G2.G.Sigma
+ -1  8.000000000000000E-001  0  0  1  0   # G2.G.TauC
+ -1     -10                  0  0  1  0   # G2.AVR.K0u
+ -1       0                  0  0  1  0   # G2.AVR.K1u
+ -1       0                  0  0  1  0   # G2.AVR.K0w
+ -1       0                  0  0  1  0   # G2.AVR.K1w
+ -1       0                  0  0  1  0   # G2.AVR.K1if
+ -1       0                  0  0  1  0   # G2.AVR.DL0
+ -1       1                  0  0  1  0   # G2.AVR.FrequencyBlockD.b[1]
+ -1       1                  0  0  1  0   # G2.AVR.FrequencyBlockU.b[1]
+ -1       0                  0  0  1  0   # G2.AVR.FrequencyBlockU.b[2]
+ -1       1                  0  0  1  0   # G2.AVR.SimpleExciter.b[1]
+ -1    1000                  0  0  1  0   # G3.G.TgenOff
+ -1      10                  0  0  1  0   # G3.G.dTgenOff
+ -1  8.500000000000000E-001  0  0  1  0   # G3.G.Pg
+ -1  5.270000000000000E-001  0  0  1  0   # G3.G.Qg
+ -1       1                  0  0  1  0   # G3.G.Ut
+ -1  1.869000000000000E+000  0  0  1  0   # G3.G.Xd
+ -1  1.869000000000000E+000  0  0  1  0   # G3.G.Xq
+ -1  1.940000000000000E-001  0  0  1  0   # G3.G.Xs
+ -1  3.016000000000000E-001  0  0  1  0   # G3.G.X1d
+ -1  2.337000000000000E-001  0  0  1  0   # G3.G.X2d
+ -1  2.337000000000000E-001  0  0  1  0   # G3.G.X2q
+ -1  9.040000000000000E-004  0  0  1  0   # G3.G.Rf
+ -1  3.688000000000000E-003  0  0  1  0   # G3.G.R1d
+ -1  2.770000000000000E-003  0  0  1  0   # G3.G.R1q
+ -1       7                  0  0  1  0   # G3.G.Tj
+ -1  4.750000000000000E-002  0  0  1  0   # G3.G.Sigma
+ -1  8.000000000000000E-001  0  0  1  0   # G3.G.TauC
+ -1     -10                  0  0  1  0   # G3.AVR.K0u
+ -1       0                  0  0  1  0   # G3.AVR.K1u
+ -1       0                  0  0  1  0   # G3.AVR.K0w
+ -1       0                  0  0  1  0   # G3.AVR.K1w
+ -1       0                  0  0  1  0   # G3.AVR.K1if
+ -1       0                  0  0  1  0   # G3.AVR.DL0
+ -1       1                  0  0  1  0   # G3.AVR.FrequencyBlockD.b[1]
+ -1       1                  0  0  1  0   # G3.AVR.FrequencyBlockU.b[1]
+ -1       0                  0  0  1  0   # G3.AVR.FrequencyBlockU.b[2]
+ -1       1                  0  0  1  0   # G3.AVR.SimpleExciter.b[1]
+ -1  1.000000000000000E-003  0  0  1  0   # T_G1.Rline
+ -1  1.000000000000000E-002  0  0  1  0   # T_G1.Xline
+ -1    1000                  0  0  1  0   # T_G1.TtOff
+ -1      10                  0  0  1  0   # T_G1.dTtOff
+ -1  1.000000000000000E-003  0  0  1  0   # T_G2.Rline
+ -1  1.000000000000000E-002  0  0  1  0   # T_G2.Xline
+ -1    1000                  0  0  1  0   # T_G2.TtOff
+ -1      10                  0  0  1  0   # T_G2.dTtOff
+ -1  1.000000000000000E-003  0  0  1  0   # T1.Rline
+ -1  1.000000000000000E-002  0  0  1  0   # T1.Xline
+ -1    1000                  0  0  1  0   # T1.TtOff
+ -1      10                  0  0  1  0   # T1.dTtOff
+ -1  1.000000000000000E-003  0  0  1  0   # T2_HV.Rline
+ -1  1.000000000000000E-002  0  0  1  0   # T2_HV.Xline
+ -1    1000                  0  0  1  0   # T2_HV.TtOff
+ -1      10                  0  0  1  0   # T2_HV.dTtOff
+ -1  1.000000000000000E-003  0  0  1  0   # T2_MV.Rline
+ -1  1.000000000000000E-002  0  0  1  0   # T2_MV.Xline
+ -1    1000                  0  0  1  0   # T2_MV.TtOff
+ -1      10                  0  0  1  0   # T2_MV.dTtOff
+ -1  1.000000000000000E-003  0  0  1  0   # T2_LV.Rline
+ -1  1.000000000000000E-002  0  0  1  0   # T2_LV.Xline
+ -1    1000                  0  0  1  0   # T2_LV.TtOff
+ -1      10                  0  0  1  0   # T2_LV.dTtOff
+ -1  1.000000000000000E-003  0  0  1  0   # T3.Rline
+ -1  1.000000000000000E-002  0  0  1  0   # T3.Xline
+ -1    1000                  0  0  1  0   # T3.TtOff
+ -1      10                  0  0  1  0   # T3.dTtOff
+ -1  1.000000000000000E-003  0  0  1  0   # AT_HV.Rline
+ -1  1.000000000000000E-002  0  0  1  0   # AT_HV.Xline
+ -1    1000                  0  0  1  0   # AT_HV.TtOff
+ -1      10                  0  0  1  0   # AT_HV.dTtOff
+ -1  1.000000000000000E-003  0  0  1  0   # AT_MV.Rline
+ -1  1.000000000000000E-002  0  0  1  0   # AT_MV.Xline
+ -1    1000                  0  0  1  0   # AT_MV.TtOff
+ -1      10                  0  0  1  0   # AT_MV.dTtOff
+ -1  1.000000000000000E-003  0  0  1  0   # AT_LV.Rline
+ -1  1.000000000000000E-002  0  0  1  0   # AT_LV.Xline
+ -1    1000                  0  0  1  0   # AT_LV.TtOff
+ -1      10                  0  0  1  0   # AT_LV.dTtOff
+ -1  1.000000000000000E-002  0  0  1  0   # L1.Rline
+ -1  1.000000000000000E-001  0  0  1  0   # L1.Xline
+ -1  1.000000000000000E-001  0  0  1  0   # L1.Bline
+ -1    1000                  0  0  1  0   # L1.TLineOff
+ -1      10                  0  0  1  0   # L1.dTLineOff
+ -1  1.000000000000000E-002  0  0  1  0   # L2.Rline
+ -1  1.000000000000000E-001  0  0  1  0   # L2.Xline
+ -1  1.000000000000000E-001  0  0  1  0   # L2.Bline
+ -1    1000                  0  0  1  0   # L2.TLineOff
+ -1      10                  0  0  1  0   # L2.dTLineOff
+ -1  1.000000000000000E-002  0  0  1  0   # L3.Rline
+ -1  1.000000000000000E-001  0  0  1  0   # L3.Xline
+ -1  1.000000000000000E-001  0  0  1  0   # L3.Bline
+ -1    1000                  0  0  1  0   # L3.TLineOff
+ -1      10                  0  0  1  0   # L3.dTLineOff
+ -1  1.000000000000000E-002  0  0  1  0   # L4.Rline
+ -1  1.000000000000000E-001  0  0  1  0   # L4.Xline
+ -1  1.000000000000000E-001  0  0  1  0   # L4.Bline
+ -1    1000                  0  0  1  0   # L4.TLineOff
+ -1      10                  0  0  1  0   # L4.dTLineOff
+ -1  1.000000000000000E-002  0  0  1  0   # L5.Rline
+ -1  1.000000000000000E-001  0  0  1  0   # L5.Xline
+ -1  1.000000000000000E-001  0  0  1  0   # L5.Bline
+ -1    1000                  0  0  1  0   # L5.TLineOff
+ -1      10                  0  0  1  0   # L5.dTLineOff
+ -1  1.000000000000000E-002  0  0  1  0   # L6.Rline
+ -1  1.000000000000000E-001  0  0  1  0   # L6.Xline
+ -1  1.000000000000000E-001  0  0  1  0   # L6.Bline
+ -1    1000                  0  0  1  0   # L6.TLineOff
+ -1      10                  0  0  1  0   # L6.dTLineOff
+ -1  7.000000000000000E-001  0  0  1  0   # N1.Gn
+ -1 -3.500000000000000E-001  0  0  1  0   # N1.Bn
+ -1    1000                  0  0  1  0   # N1.TloadOff
+ -1      10                  0  0  1  0   # N1.dTloadOff
+ -1  7.000000000000000E-001  0  0  1  0   # N2.Gn
+ -1 -3.500000000000000E-001  0  0  1  0   # N2.Bn
+ -1    1000                  0  0  1  0   # N2.TloadOff
+ -1      10                  0  0  1  0   # N2.dTloadOff
+ -1  7.000000000000000E-001  0  0  1  0   # N3.Gn
+ -1 -3.500000000000000E-001  0  0  1  0   # N3.Bn
+ -1    1000                  0  0  1  0   # N3.TloadOff
+ -1      10                  0  0  1  0   # N3.dTloadOff
+ -1  7.000000000000000E-001  0  0  1  0   # N4.Gn
+ -1 -3.500000000000000E-001  0  0  1  0   # N4.Bn
+ -1    1000                  0  0  1  0   # N4.TloadOff
+ -1      10                  0  0  1  0   # N4.dTloadOff
+ -1 -100000                  0  0  1  0   # KZ01.Bn
+ -1    1000                  0  0  1  0   # KZ01.TkzOn
+ -1  1.200000000000000E-001  0  0  1  0   # KZ01.dTkzOn
+ -1 -100000                  0  0  1  0   # KZ02.Bn
+ -1    1000                  0  0  1  0   # KZ02.TkzOn
+ -1  1.200000000000000E-001  0  0  1  0   # KZ02.dTkzOn
+ -1 -100000                  0  0  1  0   # KZ03.Bn
+ -1    1000                  0  0  1  0   # KZ03.TkzOn
+ -1  1.200000000000000E-001  0  0  1  0   # KZ03.dTkzOn
+ -1 -100000                  0  0  1  0   # KZ04.Bn
+ -1    1000                  0  0  1  0   # KZ04.TkzOn
+ -1  1.200000000000000E-001  0  0  1  0   # KZ04.dTkzOn
+ -1 -100000                  0  0  1  0   # KZ05.Bn
+ -1    1000                  0  0  1  0   # KZ05.TkzOn
+ -1  1.200000000000000E-001  0  0  1  0   # KZ05.dTkzOn
+ -1 -100000                  0  0  1  0   # KZ06.Bn
+ -1    1000                  0  0  1  0   # KZ06.TkzOn
+ -1  1.200000000000000E-001  0  0  1  0   # KZ06.dTkzOn
+ -1 -100000                  0  0  1  0   # KZ07.Bn
+ -1      50                  0  0  1  0   # KZ07.TkzOn
+ -1  1.625000000000000E+000  0  0  1  0   # KZ07.dTkzOn
+ -1 -100000                  0  0  1  0   # KZ08.Bn
+ -1    1000                  0  0  1  0   # KZ08.TkzOn
+ -1  1.200000000000000E-001  0  0  1  0   # KZ08.dTkzOn
+ -1 -100000                  0  0  1  0   # KZ09.Bn
+ -1    1000                  0  0  1  0   # KZ09.TkzOn
+ -1  1.200000000000000E-001  0  0  1  0   # KZ09.dTkzOn
+ -1 -100000                  0  0  1  0   # KZ10.Bn
+ -1    1000                  0  0  1  0   # KZ10.TkzOn
+ -1  1.200000000000000E-001  0  0  1  0   # KZ10.dTkzOn
+ -1 -100000                  0  0  1  0   # KZ11.Bn
+ -1    1000                  0  0  1  0   # KZ11.TkzOn
+ -1  1.200000000000000E-001  0  0  1  0   # KZ11.dTkzOn
+ -1 -100000                  0  0  1  0   # KZ12.Bn
+ -1    1000                  0  0  1  0   # KZ12.TkzOn
+ -1  1.200000000000000E-001  0  0  1  0   # KZ12.dTkzOn
+ -1 -100000                  0  0  1  0   # KZ13.Bn
+ -1    1000                  0  0  1  0   # KZ13.TkzOn
+ -1  1.200000000000000E-001  0  0  1  0   # KZ13.dTkzOn
+ -1 -100000                  0  0  1  0   # KZ14.Bn
+ -1    1000                  0  0  1  0   # KZ14.TkzOn
+ -1  1.200000000000000E-001  0  0  1  0   # KZ14.dTkzOn
+ -1 -100000                  0  0  1  0   # KZ15.Bn
+ -1    1000                  0  0  1  0   # KZ15.TkzOn
+ -1  1.200000000000000E-001  0  0  1  0   # KZ15.dTkzOn
+ -1 -100000                  0  0  1  0   # KZ16.Bn
+ -1    1000                  0  0  1  0   # KZ16.TkzOn
+ -1  1.200000000000000E-001  0  0  1  0   # KZ16.dTkzOn
+ -1       0                  0  0  2  0   # G1.G.Mu
+ -1       0                  0  0  2  0   # G1.G.Yr
+ -1       0                  0  0  2  0   # G1.G.Yrd
+ -1       0                  0  0  2  0   # G1.G.Yrq
+ -1       0                  0  0  2  0   # G1.G.s
+ -1       0                  0  0  2  0   # G1.G.DGi
+ -1       0                  0  0  2  0   # G1.AVR.VoltageDeviation.x[1]
+ -1       0                  0  0  2  0   # G1.AVR.VoltageDerivative.x[1]
+ -1       0                  0  0  2  0   # G1.AVR.FrequencyBlockD.x[1]
+ -1       0                  0  0  2  0   # G1.AVR.FrequencyBlockU.x[1]
+ -1       0                  0  0  2  0   # G1.AVR.FrequencyDeviation.x[1]
+ -1       0                  0  0  2  0   # G1.AVR.FrequencyDerivative.x[1]
+ -1       0                  0  0  2  0   # G1.AVR.ExcitationCurrent.x[1]
+ -1       0                  0  0  2  0   # G1.AVR.SimpleExciter.x[1]
+ -1       0                  0  0  2  0   # G2.G.Mu
+ -1       0                  0  0  2  0   # G2.G.Yr
+ -1       0                  0  0  2  0   # G2.G.Yrd
+ -1       0                  0  0  2  0   # G2.G.Yrq
+ -1       0                  0  0  2  0   # G2.G.s
+ -1       0                  0  0  2  0   # G2.G.DGi
+ -1       0                  0  0  2  0   # G2.AVR.VoltageDeviation.x[1]
+ -1       0                  0  0  2  0   # G2.AVR.VoltageDerivative.x[1]
+ -1       0                  0  0  2  0   # G2.AVR.FrequencyBlockD.x[1]
+ -1       0                  0  0  2  0   # G2.AVR.FrequencyBlockU.x[1]
+ -1       0                  0  0  2  0   # G2.AVR.FrequencyDeviation.x[1]
+ -1       0                  0  0  2  0   # G2.AVR.FrequencyDerivative.x[1]
+ -1       0                  0  0  2  0   # G2.AVR.ExcitationCurrent.x[1]
+ -1       0                  0  0  2  0   # G2.AVR.SimpleExciter.x[1]
+ -1       0                  0  0  2  0   # G3.G.Mu
+ -1       0                  0  0  2  0   # G3.G.Yr
+ -1       0                  0  0  2  0   # G3.G.Yrd
+ -1       0                  0  0  2  0   # G3.G.Yrq
+ -1       0                  0  0  2  0   # G3.G.s
+ -1       0                  0  0  2  0   # G3.G.DGi
+ -1       0                  0  0  2  0   # G3.AVR.VoltageDeviation.x[1]
+ -1       0                  0  0  2  0   # G3.AVR.VoltageDerivative.x[1]
+ -1       0                  0  0  2  0   # G3.AVR.FrequencyBlockD.x[1]
+ -1       0                  0  0  2  0   # G3.AVR.FrequencyBlockU.x[1]
+ -1       0                  0  0  2  0   # G3.AVR.FrequencyDeviation.x[1]
+ -1       0                  0  0  2  0   # G3.AVR.FrequencyDerivative.x[1]
+ -1       0                  0  0  2  0   # G3.AVR.ExcitationCurrent.x[1]
+ -1       0                  0  0  2  0   # G3.AVR.SimpleExciter.x[1]
+ -1       0                  0  0  2  0   # delta_G1_G2
+ -1       0                  0  0  2  0   # delta_G1_G3
+ -1       0                  0  0  2  0   # delta_G2_G3
+  0       0                  0  0  3  0   # G1.G.der(Mu)
+  0       0                  0  0  3  0   # G1.G.der(Yr)
+  0       0                  0  0  3  0   # G1.G.der(Yrd)
+  0       0                  0  0  3  0   # G1.G.der(Yrq)
+  0       0                  0  0  3  0   # G1.G.der(s)
+  0       0                  0  0  3  0   # G1.G.der(DGi)
+  0       0                  0  0  3  0   # G1.AVR.VoltageDeviation.der(x[1])
+  0       0                  0  0  3  0   # G1.AVR.VoltageDerivative.der(x[1])
+  0       0                  0  0  3  0   # G1.AVR.FrequencyBlockD.der(x[1])
+  0       0                  0  0  3  0   # G1.AVR.FrequencyBlockU.der(x[1])
+  0       0                  0  0  3  0   # G1.AVR.FrequencyDeviation.der(x[1])
+  0       0                  0  0  3  0   # G1.AVR.FrequencyDerivative.der(x[1])
+  0       0                  0  0  3  0   # G1.AVR.ExcitationCurrent.der(x[1])
+  0       0                  0  0  3  0   # G1.AVR.SimpleExciter.der(x[1])
+  0       0                  0  0  3  0   # G2.G.der(Mu)
+  0       0                  0  0  3  0   # G2.G.der(Yr)
+  0       0                  0  0  3  0   # G2.G.der(Yrd)
+  0       0                  0  0  3  0   # G2.G.der(Yrq)
+  0       0                  0  0  3  0   # G2.G.der(s)
+  0       0                  0  0  3  0   # G2.G.der(DGi)
+  0       0                  0  0  3  0   # G2.AVR.VoltageDeviation.der(x[1])
+  0       0                  0  0  3  0   # G2.AVR.VoltageDerivative.der(x[1])
+  0       0                  0  0  3  0   # G2.AVR.FrequencyBlockD.der(x[1])
+  0       0                  0  0  3  0   # G2.AVR.FrequencyBlockU.der(x[1])
+  0       0                  0  0  3  0   # G2.AVR.FrequencyDeviation.der(x[1])
+  0       0                  0  0  3  0   # G2.AVR.FrequencyDerivative.der(x[1])
+  0       0                  0  0  3  0   # G2.AVR.ExcitationCurrent.der(x[1])
+  0       0                  0  0  3  0   # G2.AVR.SimpleExciter.der(x[1])
+  0       0                  0  0  3  0   # G3.G.der(Mu)
+  0       0                  0  0  3  0   # G3.G.der(Yr)
+  0       0                  0  0  3  0   # G3.G.der(Yrd)
+  0       0                  0  0  3  0   # G3.G.der(Yrq)
+  0       0                  0  0  3  0   # G3.G.der(s)
+  0       0                  0  0  3  0   # G3.G.der(DGi)
+  0       0                  0  0  3  0   # G3.AVR.VoltageDeviation.der(x[1])
+  0       0                  0  0  3  0   # G3.AVR.VoltageDerivative.der(x[1])
+  0       0                  0  0  3  0   # G3.AVR.FrequencyBlockD.der(x[1])
+  0       0                  0  0  3  0   # G3.AVR.FrequencyBlockU.der(x[1])
+  0       0                  0  0  3  0   # G3.AVR.FrequencyDeviation.der(x[1])
+  0       0                  0  0  3  0   # G3.AVR.FrequencyDerivative.der(x[1])
+  0       0                  0  0  3  0   # G3.AVR.ExcitationCurrent.der(x[1])
+  0       0                  0  0  3  0   # G3.AVR.SimpleExciter.der(x[1])
+  0       0                  0  0  3  0   # der(delta_G1_G2)
+  0       0                  0  0  3  0   # der(delta_G1_G3)
+  0       0                  0  0  3  0   # der(delta_G2_G3)
+  0       0                  0  0  6  0   # G1.G.Xt
+  0       0                  0  0  6  0   # G1.G.dEr
+  0  3.141592653589790E+000  0  0  6  0   # G1.G.PI
+  0  3.141592653589790E+002  0  0  6  0   # G1.G.Wc
+  0       0                  0  0  6  0   # G1.G.Ra
+  0       0                  0  0  6  0   # G1.G.Rt
+  0  1.100000000000000E+000  0  0  6  0   # G1.G.Mtmax
+  0       0                  0  0  6  0   # G1.G.EQ
+  0       0                  0  0  6  0   # G1.G.Dg
+  0       0                  0  0  6  0   # G1.G.Uq
+  0       0                  0  0  6  0   # G1.G.Ud
+  0       0                  0  0  6  0   # G1.G.Id
+  0       0                  0  0  6  0   # G1.G.Iq
+  0       0                  0  0  6  0   # G1.G.Mt
+  0       0                  0  0  6  0   # G1.G.Eiq
+  0       0                  0  0  6  0   # G1.G.Ir
+  0       0                  0  0  6  0   # G1.G.Uf
+  0       0                  0  0  6  0   # G1.G.Eq
+  0       0                  0  0  6  0   # G1.G.Er0
+  0       0                  0  0  6  0   # G1.G.PsiR
+  0       0                  0  0  6  0   # G1.G.PsiRD
+  0       0                  0  0  6  0   # G1.G.PsiRQ
+  0       0                  0  0  6  0   # G1.G.Er_max
+  0       0                  0  0  6  0   # G1.G.Er_min
+  0       0                  0  0  6  0   # G1.G.Uf_full
+  0       0                  0  0  6  0   # G1.G.Xad
+  0       0                  0  0  6  0   # G1.G.Xaq
+  0       0                  0  0  6  0   # G1.G.X2dt
+  0       0                  0  0  6  0   # G1.G.X2qt
+  0       0                  0  0  6  0   # G1.G.Rs
+  0       0                  0  0  6  0   # G1.G.Xsf
+  0       0                  0  0  6  0   # G1.G.Xs1d
+  0       0                  0  0  6  0   # G1.G.Xs1q
+  0       0                  0  0  6  0   # G1.G.X1
+  0       0                  0  0  6  0   # G1.G.X2
+  0       0                  0  0  6  0   # G1.G.X3
+  0       0                  0  0  6  0   # G1.G.Ugen
+  0       0                  0  0  6  0   # G1.G.Mu0
+  0       0                  0  0  6  0   # G1.G.Ro
+  0       0                  0  0  6  0   # G1.G.Mt_pp
+  0       0                  0  0  6  0   # G1.G.Pgen
+  0       0                  0  0  6  0   # G1.G.Qgen
+  0       0                  0  0  6  0   # G1.G.UdG
+  0       0                  0  0  6  0   # G1.G.UqG
+  0       0                  0  0  6  0   # G1.G.DeltaIJ
+  0       0                  0  0  6  0   # G1.G.Tregmax
+  0       0                  0  0  6  0   # G1.G.Me
+  0       0                  0  0  6  0   # G1.G.Yad
+  0       0                  0  0  6  0   # G1.G.Yaq
+  0       0                  0  0  6  0   # G1.G.iq
+  0       0                  0  0  6  0   # G1.G.id
+  0       0                  0  0  6  0   # G1.G.ir
+  0       0                  0  0  6  0   # G1.G.ird
+  0       0                  0  0  6  0   # G1.G.irq
+  0       0                  0  0  6  0   # G1.G.E11d
+  0       0                  0  0  6  0   # G1.G.E11q
+  0  5.000000000000000E-002  0  0  6  0   # G1.AVR.Tokp
+  0  2.000000000000000E-002  0  0  6  0   # G1.AVR.T0u
+  0  3.900000000000000E-002  0  0  6  0   # G1.AVR.T1u
+  0  7.000000000000001E-002  0  0  6  0   # G1.AVR.Tfb
+  0       1                  0  0  6  0   # G1.AVR.T0w
+  0  2.600000000000000E-002  0  0  6  0   # G1.AVR.T1w
+  0  3.000000000000000E-002  0  0  6  0   # G1.AVR.T1if
+  0       0                  0  0  6  0   # G1.AVR.VoltageDeviation.b[1]
+  0  2.000000000000000E-002  0  0  6  0   # G1.AVR.VoltageDeviation.a[1]
+  0       1                  0  0  6  0   # G1.AVR.VoltageDeviation.a[2]
+  0       2                  0  0  6  0   # G1.AVR.VoltageDeviation.na
+  0       1                  0  0  6  0   # G1.AVR.VoltageDeviation.nb
+  0       1                  0  0  6  0   # G1.AVR.VoltageDeviation.nx
+  0       0                  0  0  6  0   # G1.AVR.VoltageDeviation.u
+  0       0                  0  0  6  0   # G1.AVR.VoltageDeviation.y
+  0       0                  0  0  6  0   # G1.AVR.VoltageDerivative.b[1]
+  0       0                  0  0  6  0   # G1.AVR.VoltageDerivative.b[2]
+  0  3.900000000000000E-002  0  0  6  0   # G1.AVR.VoltageDerivative.a[1]
+  0       1                  0  0  6  0   # G1.AVR.VoltageDerivative.a[2]
+  0       2                  0  0  6  0   # G1.AVR.VoltageDerivative.na
+  0       2                  0  0  6  0   # G1.AVR.VoltageDerivative.nb
+  0       1                  0  0  6  0   # G1.AVR.VoltageDerivative.nx
+  0       0                  0  0  6  0   # G1.AVR.VoltageDerivative.y
+  0  7.000000000000001E-002  0  0  6  0   # G1.AVR.FrequencyBlockD.a[1]
+  0       1                  0  0  6  0   # G1.AVR.FrequencyBlockD.a[2]
+  0       2                  0  0  6  0   # G1.AVR.FrequencyBlockD.na
+  0       1                  0  0  6  0   # G1.AVR.FrequencyBlockD.nb
+  0       1                  0  0  6  0   # G1.AVR.FrequencyBlockD.nx
+  0       0                  0  0  6  0   # G1.AVR.FrequencyBlockD.u
+  0       0                  0  0  6  0   # G1.AVR.FrequencyBlockD.y
+  0  7.000000000000001E-002  0  0  6  0   # G1.AVR.FrequencyBlockU.a[1]
+  0       1                  0  0  6  0   # G1.AVR.FrequencyBlockU.a[2]
+  0       2                  0  0  6  0   # G1.AVR.FrequencyBlockU.na
+  0       2                  0  0  6  0   # G1.AVR.FrequencyBlockU.nb
+  0       1                  0  0  6  0   # G1.AVR.FrequencyBlockU.nx
+  0       0                  0  0  6  0   # G1.AVR.FrequencyBlockU.u
+  0       0                  0  0  6  0   # G1.AVR.FrequencyBlockU.y
+  0       0                  0  0  6  0   # G1.AVR.FrequencyDeviation.b[1]
+  0       0                  0  0  6  0   # G1.AVR.FrequencyDeviation.b[2]
+  0       1                  0  0  6  0   # G1.AVR.FrequencyDeviation.a[1]
+  0       1                  0  0  6  0   # G1.AVR.FrequencyDeviation.a[2]
+  0       2                  0  0  6  0   # G1.AVR.FrequencyDeviation.na
+  0       2                  0  0  6  0   # G1.AVR.FrequencyDeviation.nb
+  0       1                  0  0  6  0   # G1.AVR.FrequencyDeviation.nx
+  0       0                  0  0  6  0   # G1.AVR.FrequencyDeviation.u
+  0       0                  0  0  6  0   # G1.AVR.FrequencyDeviation.y
+  0       0                  0  0  6  0   # G1.AVR.FrequencyDerivative.b[1]
+  0       0                  0  0  6  0   # G1.AVR.FrequencyDerivative.b[2]
+  0  2.600000000000000E-002  0  0  6  0   # G1.AVR.FrequencyDerivative.a[1]
+  0       1                  0  0  6  0   # G1.AVR.FrequencyDerivative.a[2]
+  0       2                  0  0  6  0   # G1.AVR.FrequencyDerivative.na
+  0       2                  0  0  6  0   # G1.AVR.FrequencyDerivative.nb
+  0       1                  0  0  6  0   # G1.AVR.FrequencyDerivative.nx
+  0       0                  0  0  6  0   # G1.AVR.FrequencyDerivative.y
+  0       0                  0  0  6  0   # G1.AVR.ExcitationCurrent.b[1]
+  0       0                  0  0  6  0   # G1.AVR.ExcitationCurrent.b[2]
+  0  3.000000000000000E-002  0  0  6  0   # G1.AVR.ExcitationCurrent.a[1]
+  0       1                  0  0  6  0   # G1.AVR.ExcitationCurrent.a[2]
+  0       2                  0  0  6  0   # G1.AVR.ExcitationCurrent.na
+  0       2                  0  0  6  0   # G1.AVR.ExcitationCurrent.nb
+  0       1                  0  0  6  0   # G1.AVR.ExcitationCurrent.nx
+  0       0                  0  0  6  0   # G1.AVR.ExcitationCurrent.u
+  0       0                  0  0  6  0   # G1.AVR.ExcitationCurrent.y
+  0  5.000000000000000E-002  0  0  6  0   # G1.AVR.SimpleExciter.a[1]
+  0       1                  0  0  6  0   # G1.AVR.SimpleExciter.a[2]
+  0       2                  0  0  6  0   # G1.AVR.SimpleExciter.na
+  0       1                  0  0  6  0   # G1.AVR.SimpleExciter.nb
+  0       1                  0  0  6  0   # G1.AVR.SimpleExciter.nx
+  0       0                  0  0  6  0   # G1.AVR.SimpleExciter.u
+  0       0                  0  0  6  0   # G2.G.Xt
+  0       0                  0  0  6  0   # G2.G.dEr
+  0  3.141592653589790E+000  0  0  6  0   # G2.G.PI
+  0  3.141592653589790E+002  0  0  6  0   # G2.G.Wc
+  0       0                  0  0  6  0   # G2.G.Ra
+  0       0                  0  0  6  0   # G2.G.Rt
+  0  1.100000000000000E+000  0  0  6  0   # G2.G.Mtmax
+  0       0                  0  0  6  0   # G2.G.EQ
+  0       0                  0  0  6  0   # G2.G.Dg
+  0       0                  0  0  6  0   # G2.G.Uq
+  0       0                  0  0  6  0   # G2.G.Ud
+  0       0                  0  0  6  0   # G2.G.Id
+  0       0                  0  0  6  0   # G2.G.Iq
+  0       0                  0  0  6  0   # G2.G.Mt
+  0       0                  0  0  6  0   # G2.G.Eiq
+  0       0                  0  0  6  0   # G2.G.Ir
+  0       0                  0  0  6  0   # G2.G.Uf
+  0       0                  0  0  6  0   # G2.G.Eq
+  0       0                  0  0  6  0   # G2.G.Er0
+  0       0                  0  0  6  0   # G2.G.PsiR
+  0       0                  0  0  6  0   # G2.G.PsiRD
+  0       0                  0  0  6  0   # G2.G.PsiRQ
+  0       0                  0  0  6  0   # G2.G.Er_max
+  0       0                  0  0  6  0   # G2.G.Er_min
+  0       0                  0  0  6  0   # G2.G.Uf_full
+  0       0                  0  0  6  0   # G2.G.Xad
+  0       0                  0  0  6  0   # G2.G.Xaq
+  0       0                  0  0  6  0   # G2.G.X2dt
+  0       0                  0  0  6  0   # G2.G.X2qt
+  0       0                  0  0  6  0   # G2.G.Rs
+  0       0                  0  0  6  0   # G2.G.Xsf
+  0       0                  0  0  6  0   # G2.G.Xs1d
+  0       0                  0  0  6  0   # G2.G.Xs1q
+  0       0                  0  0  6  0   # G2.G.X1
+  0       0                  0  0  6  0   # G2.G.X2
+  0       0                  0  0  6  0   # G2.G.X3
+  0       0                  0  0  6  0   # G2.G.Ugen
+  0       0                  0  0  6  0   # G2.G.Mu0
+  0       0                  0  0  6  0   # G2.G.Ro
+  0       0                  0  0  6  0   # G2.G.Mt_pp
+  0       0                  0  0  6  0   # G2.G.Pgen
+  0       0                  0  0  6  0   # G2.G.Qgen
+  0       0                  0  0  6  0   # G2.G.UdG
+  0       0                  0  0  6  0   # G2.G.UqG
+  0       0                  0  0  6  0   # G2.G.IdG
+  0       0                  0  0  6  0   # G2.G.IqG
+  0       0                  0  0  6  0   # G2.G.Tregmax
+  0       0                  0  0  6  0   # G2.G.Me
+  0       0                  0  0  6  0   # G2.G.Yad
+  0       0                  0  0  6  0   # G2.G.Yaq
+  0       0                  0  0  6  0   # G2.G.iq
+  0       0                  0  0  6  0   # G2.G.id
+  0       0                  0  0  6  0   # G2.G.ir
+  0       0                  0  0  6  0   # G2.G.ird
+  0       0                  0  0  6  0   # G2.G.irq
+  0       0                  0  0  6  0   # G2.G.ud
+  0       0                  0  0  6  0   # G2.G.uq
+  0       0                  0  0  6  0   # G2.G.E11d
+  0       0                  0  0  6  0   # G2.G.E11q
+  0  5.000000000000000E-002  0  0  6  0   # G2.AVR.Tokp
+  0  2.000000000000000E-002  0  0  6  0   # G2.AVR.T0u
+  0  3.900000000000000E-002  0  0  6  0   # G2.AVR.T1u
+  0  7.000000000000001E-002  0  0  6  0   # G2.AVR.Tfb
+  0       1                  0  0  6  0   # G2.AVR.T0w
+  0  2.600000000000000E-002  0  0  6  0   # G2.AVR.T1w
+  0  3.000000000000000E-002  0  0  6  0   # G2.AVR.T1if
+  0       0                  0  0  6  0   # G2.AVR.VoltageDeviation.b[1]
+  0  2.000000000000000E-002  0  0  6  0   # G2.AVR.VoltageDeviation.a[1]
+  0       1                  0  0  6  0   # G2.AVR.VoltageDeviation.a[2]
+  0       2                  0  0  6  0   # G2.AVR.VoltageDeviation.na
+  0       1                  0  0  6  0   # G2.AVR.VoltageDeviation.nb
+  0       1                  0  0  6  0   # G2.AVR.VoltageDeviation.nx
+  0       0                  0  0  6  0   # G2.AVR.VoltageDeviation.u
+  0       0                  0  0  6  0   # G2.AVR.VoltageDeviation.y
+  0       0                  0  0  6  0   # G2.AVR.VoltageDerivative.b[1]
+  0       0                  0  0  6  0   # G2.AVR.VoltageDerivative.b[2]
+  0  3.900000000000000E-002  0  0  6  0   # G2.AVR.VoltageDerivative.a[1]
+  0       1                  0  0  6  0   # G2.AVR.VoltageDerivative.a[2]
+  0       2                  0  0  6  0   # G2.AVR.VoltageDerivative.na
+  0       2                  0  0  6  0   # G2.AVR.VoltageDerivative.nb
+  0       1                  0  0  6  0   # G2.AVR.VoltageDerivative.nx
+  0       0                  0  0  6  0   # G2.AVR.VoltageDerivative.y
+  0  7.000000000000001E-002  0  0  6  0   # G2.AVR.FrequencyBlockD.a[1]
+  0       1                  0  0  6  0   # G2.AVR.FrequencyBlockD.a[2]
+  0       2                  0  0  6  0   # G2.AVR.FrequencyBlockD.na
+  0       1                  0  0  6  0   # G2.AVR.FrequencyBlockD.nb
+  0       1                  0  0  6  0   # G2.AVR.FrequencyBlockD.nx
+  0       0                  0  0  6  0   # G2.AVR.FrequencyBlockD.u
+  0       0                  0  0  6  0   # G2.AVR.FrequencyBlockD.y
+  0  7.000000000000001E-002  0  0  6  0   # G2.AVR.FrequencyBlockU.a[1]
+  0       1                  0  0  6  0   # G2.AVR.FrequencyBlockU.a[2]
+  0       2                  0  0  6  0   # G2.AVR.FrequencyBlockU.na
+  0       2                  0  0  6  0   # G2.AVR.FrequencyBlockU.nb
+  0       1                  0  0  6  0   # G2.AVR.FrequencyBlockU.nx
+  0       0                  0  0  6  0   # G2.AVR.FrequencyBlockU.u
+  0       0                  0  0  6  0   # G2.AVR.FrequencyBlockU.y
+  0       0                  0  0  6  0   # G2.AVR.FrequencyDeviation.b[1]
+  0       0                  0  0  6  0   # G2.AVR.FrequencyDeviation.b[2]
+  0       1                  0  0  6  0   # G2.AVR.FrequencyDeviation.a[1]
+  0       1                  0  0  6  0   # G2.AVR.FrequencyDeviation.a[2]
+  0       2                  0  0  6  0   # G2.AVR.FrequencyDeviation.na
+  0       2                  0  0  6  0   # G2.AVR.FrequencyDeviation.nb
+  0       1                  0  0  6  0   # G2.AVR.FrequencyDeviation.nx
+  0       0                  0  0  6  0   # G2.AVR.FrequencyDeviation.u
+  0       0                  0  0  6  0   # G2.AVR.FrequencyDeviation.y
+  0       0                  0  0  6  0   # G2.AVR.FrequencyDerivative.b[1]
+  0       0                  0  0  6  0   # G2.AVR.FrequencyDerivative.b[2]
+  0  2.600000000000000E-002  0  0  6  0   # G2.AVR.FrequencyDerivative.a[1]
+  0       1                  0  0  6  0   # G2.AVR.FrequencyDerivative.a[2]
+  0       2                  0  0  6  0   # G2.AVR.FrequencyDerivative.na
+  0       2                  0  0  6  0   # G2.AVR.FrequencyDerivative.nb
+  0       1                  0  0  6  0   # G2.AVR.FrequencyDerivative.nx
+  0       0                  0  0  6  0   # G2.AVR.FrequencyDerivative.y
+  0       0                  0  0  6  0   # G2.AVR.ExcitationCurrent.b[1]
+  0       0                  0  0  6  0   # G2.AVR.ExcitationCurrent.b[2]
+  0  3.000000000000000E-002  0  0  6  0   # G2.AVR.ExcitationCurrent.a[1]
+  0       1                  0  0  6  0   # G2.AVR.ExcitationCurrent.a[2]
+  0       2                  0  0  6  0   # G2.AVR.ExcitationCurrent.na
+  0       2                  0  0  6  0   # G2.AVR.ExcitationCurrent.nb
+  0       1                  0  0  6  0   # G2.AVR.ExcitationCurrent.nx
+  0       0                  0  0  6  0   # G2.AVR.ExcitationCurrent.u
+  0       0                  0  0  6  0   # G2.AVR.ExcitationCurrent.y
+  0  5.000000000000000E-002  0  0  6  0   # G2.AVR.SimpleExciter.a[1]
+  0       1                  0  0  6  0   # G2.AVR.SimpleExciter.a[2]
+  0       2                  0  0  6  0   # G2.AVR.SimpleExciter.na
+  0       1                  0  0  6  0   # G2.AVR.SimpleExciter.nb
+  0       1                  0  0  6  0   # G2.AVR.SimpleExciter.nx
+  0       0                  0  0  6  0   # G2.AVR.SimpleExciter.u
+  0       0                  0  0  6  0   # G3.G.Xt
+  0       0                  0  0  6  0   # G3.G.dEr
+  0  3.141592653589790E+000  0  0  6  0   # G3.G.PI
+  0  3.141592653589790E+002  0  0  6  0   # G3.G.Wc
+  0       0                  0  0  6  0   # G3.G.Ra
+  0       0                  0  0  6  0   # G3.G.Rt
+  0  1.100000000000000E+000  0  0  6  0   # G3.G.Mtmax
+  0       0                  0  0  6  0   # G3.G.EQ
+  0       0                  0  0  6  0   # G3.G.Dg
+  0       0                  0  0  6  0   # G3.G.Uq
+  0       0                  0  0  6  0   # G3.G.Ud
+  0       0                  0  0  6  0   # G3.G.Id
+  0       0                  0  0  6  0   # G3.G.Iq
+  0       0                  0  0  6  0   # G3.G.Mt
+  0       0                  0  0  6  0   # G3.G.Eiq
+  0       0                  0  0  6  0   # G3.G.Ir
+  0       0                  0  0  6  0   # G3.G.Uf
+  0       0                  0  0  6  0   # G3.G.Eq
+  0       0                  0  0  6  0   # G3.G.Er0
+  0       0                  0  0  6  0   # G3.G.PsiR
+  0       0                  0  0  6  0   # G3.G.PsiRD
+  0       0                  0  0  6  0   # G3.G.PsiRQ
+  0       0                  0  0  6  0   # G3.G.Er_max
+  0       0                  0  0  6  0   # G3.G.Er_min
+  0       0                  0  0  6  0   # G3.G.Uf_full
+  0       0                  0  0  6  0   # G3.G.Xad
+  0       0                  0  0  6  0   # G3.G.Xaq
+  0       0                  0  0  6  0   # G3.G.X2dt
+  0       0                  0  0  6  0   # G3.G.X2qt
+  0       0                  0  0  6  0   # G3.G.Rs
+  0       0                  0  0  6  0   # G3.G.Xsf
+  0       0                  0  0  6  0   # G3.G.Xs1d
+  0       0                  0  0  6  0   # G3.G.Xs1q
+  0       0                  0  0  6  0   # G3.G.X1
+  0       0                  0  0  6  0   # G3.G.X2
+  0       0                  0  0  6  0   # G3.G.X3
+  0       0                  0  0  6  0   # G3.G.Ugen
+  0       0                  0  0  6  0   # G3.G.Mu0
+  0       0                  0  0  6  0   # G3.G.Ro
+  0       0                  0  0  6  0   # G3.G.Mt_pp
+  0       0                  0  0  6  0   # G3.G.Pgen
+  0       0                  0  0  6  0   # G3.G.Qgen
+  0       0                  0  0  6  0   # G3.G.UdG
+  0       0                  0  0  6  0   # G3.G.UqG
+  0       0                  0  0  6  0   # G3.G.IdG
+  0       0                  0  0  6  0   # G3.G.IqG
+  0       0                  0  0  6  0   # G3.G.Tregmax
+  0       0                  0  0  6  0   # G3.G.Me
+  0       0                  0  0  6  0   # G3.G.Yad
+  0       0                  0  0  6  0   # G3.G.Yaq
+  0       0                  0  0  6  0   # G3.G.iq
+  0       0                  0  0  6  0   # G3.G.id
+  0       0                  0  0  6  0   # G3.G.ir
+  0       0                  0  0  6  0   # G3.G.ird
+  0       0                  0  0  6  0   # G3.G.irq
+  0       0                  0  0  6  0   # G3.G.ud
+  0       0                  0  0  6  0   # G3.G.uq
+  0       0                  0  0  6  0   # G3.G.E11d
+  0       0                  0  0  6  0   # G3.G.E11q
+  0  5.000000000000000E-002  0  0  6  0   # G3.AVR.Tokp
+  0  2.000000000000000E-002  0  0  6  0   # G3.AVR.T0u
+  0  3.900000000000000E-002  0  0  6  0   # G3.AVR.T1u
+  0  7.000000000000001E-002  0  0  6  0   # G3.AVR.Tfb
+  0       1                  0  0  6  0   # G3.AVR.T0w
+  0  2.600000000000000E-002  0  0  6  0   # G3.AVR.T1w
+  0  3.000000000000000E-002  0  0  6  0   # G3.AVR.T1if
+  0       0                  0  0  6  0   # G3.AVR.VoltageDeviation.b[1]
+  0  2.000000000000000E-002  0  0  6  0   # G3.AVR.VoltageDeviation.a[1]
+  0       1                  0  0  6  0   # G3.AVR.VoltageDeviation.a[2]
+  0       2                  0  0  6  0   # G3.AVR.VoltageDeviation.na
+  0       1                  0  0  6  0   # G3.AVR.VoltageDeviation.nb
+  0       1                  0  0  6  0   # G3.AVR.VoltageDeviation.nx
+  0       0                  0  0  6  0   # G3.AVR.VoltageDeviation.u
+  0       0                  0  0  6  0   # G3.AVR.VoltageDeviation.y
+  0       0                  0  0  6  0   # G3.AVR.VoltageDerivative.b[1]
+  0       0                  0  0  6  0   # G3.AVR.VoltageDerivative.b[2]
+  0  3.900000000000000E-002  0  0  6  0   # G3.AVR.VoltageDerivative.a[1]
+  0       1                  0  0  6  0   # G3.AVR.VoltageDerivative.a[2]
+  0       2                  0  0  6  0   # G3.AVR.VoltageDerivative.na
+  0       2                  0  0  6  0   # G3.AVR.VoltageDerivative.nb
+  0       1                  0  0  6  0   # G3.AVR.VoltageDerivative.nx
+  0       0                  0  0  6  0   # G3.AVR.VoltageDerivative.y
+  0  7.000000000000001E-002  0  0  6  0   # G3.AVR.FrequencyBlockD.a[1]
+  0       1                  0  0  6  0   # G3.AVR.FrequencyBlockD.a[2]
+  0       2                  0  0  6  0   # G3.AVR.FrequencyBlockD.na
+  0       1                  0  0  6  0   # G3.AVR.FrequencyBlockD.nb
+  0       1                  0  0  6  0   # G3.AVR.FrequencyBlockD.nx
+  0       0                  0  0  6  0   # G3.AVR.FrequencyBlockD.u
+  0       0                  0  0  6  0   # G3.AVR.FrequencyBlockD.y
+  0  7.000000000000001E-002  0  0  6  0   # G3.AVR.FrequencyBlockU.a[1]
+  0       1                  0  0  6  0   # G3.AVR.FrequencyBlockU.a[2]
+  0       2                  0  0  6  0   # G3.AVR.FrequencyBlockU.na
+  0       2                  0  0  6  0   # G3.AVR.FrequencyBlockU.nb
+  0       1                  0  0  6  0   # G3.AVR.FrequencyBlockU.nx
+  0       0                  0  0  6  0   # G3.AVR.FrequencyBlockU.u
+  0       0                  0  0  6  0   # G3.AVR.FrequencyBlockU.y
+  0       0                  0  0  6  0   # G3.AVR.FrequencyDeviation.b[1]
+  0       0                  0  0  6  0   # G3.AVR.FrequencyDeviation.b[2]
+  0       1                  0  0  6  0   # G3.AVR.FrequencyDeviation.a[1]
+  0       1                  0  0  6  0   # G3.AVR.FrequencyDeviation.a[2]
+  0       2                  0  0  6  0   # G3.AVR.FrequencyDeviation.na
+  0       2                  0  0  6  0   # G3.AVR.FrequencyDeviation.nb
+  0       1                  0  0  6  0   # G3.AVR.FrequencyDeviation.nx
+  0       0                  0  0  6  0   # G3.AVR.FrequencyDeviation.u
+  0       0                  0  0  6  0   # G3.AVR.FrequencyDeviation.y
+  0       0                  0  0  6  0   # G3.AVR.FrequencyDerivative.b[1]
+  0       0                  0  0  6  0   # G3.AVR.FrequencyDerivative.b[2]
+  0  2.600000000000000E-002  0  0  6  0   # G3.AVR.FrequencyDerivative.a[1]
+  0       1                  0  0  6  0   # G3.AVR.FrequencyDerivative.a[2]
+  0       2                  0  0  6  0   # G3.AVR.FrequencyDerivative.na
+  0       2                  0  0  6  0   # G3.AVR.FrequencyDerivative.nb
+  0       1                  0  0  6  0   # G3.AVR.FrequencyDerivative.nx
+  0       0                  0  0  6  0   # G3.AVR.FrequencyDerivative.y
+  0       0                  0  0  6  0   # G3.AVR.ExcitationCurrent.b[1]
+  0       0                  0  0  6  0   # G3.AVR.ExcitationCurrent.b[2]
+  0  3.000000000000000E-002  0  0  6  0   # G3.AVR.ExcitationCurrent.a[1]
+  0       1                  0  0  6  0   # G3.AVR.ExcitationCurrent.a[2]
+  0       2                  0  0  6  0   # G3.AVR.ExcitationCurrent.na
+  0       2                  0  0  6  0   # G3.AVR.ExcitationCurrent.nb
+  0       1                  0  0  6  0   # G3.AVR.ExcitationCurrent.nx
+  0       0                  0  0  6  0   # G3.AVR.ExcitationCurrent.u
+  0       0                  0  0  6  0   # G3.AVR.ExcitationCurrent.y
+  0  5.000000000000000E-002  0  0  6  0   # G3.AVR.SimpleExciter.a[1]
+  0       1                  0  0  6  0   # G3.AVR.SimpleExciter.a[2]
+  0       2                  0  0  6  0   # G3.AVR.SimpleExciter.na
+  0       1                  0  0  6  0   # G3.AVR.SimpleExciter.nb
+  0       1                  0  0  6  0   # G3.AVR.SimpleExciter.nx
+  0       0                  0  0  6  0   # G3.AVR.SimpleExciter.u
+  0       0                  0  0  6  0   # T_G1.I12d
+  0       0                  0  0  6  0   # T_G1.I12q
+  0       0                  0  0  6  0   # T_G1.I12m
+  0       0                  0  0  6  0   # T_G1.U1m
+  0       0                  0  0  6  0   # T_G1.U2m
+  0       0                  0  0  6  0   # T_G1.P1
+  0       0                  0  0  6  0   # T_G1.Q1
+  0       0                  0  0  6  0   # T_G1.P2
+  0       0                  0  0  6  0   # T_G1.Q2
+  0       0                  0  0  6  0   # T_G1.RL
+  0       0                  0  0  6  0   # T_G1.XL
+  0       0                  0  0  6  0   # T_G2.I12d
+  0       0                  0  0  6  0   # T_G2.I12q
+  0       0                  0  0  6  0   # T_G2.I12m
+  0       0                  0  0  6  0   # T_G2.U1m
+  0       0                  0  0  6  0   # T_G2.U2m
+  0       0                  0  0  6  0   # T_G2.P1
+  0       0                  0  0  6  0   # T_G2.Q1
+  0       0                  0  0  6  0   # T_G2.P2
+  0       0                  0  0  6  0   # T_G2.Q2
+  0       0                  0  0  6  0   # T_G2.RL
+  0       0                  0  0  6  0   # T_G2.XL
+  0       0                  0  0  6  0   # T1.U2d
+  0       0                  0  0  6  0   # T1.U2q
+  0       0                  0  0  6  0   # T1.I12d
+  0       0                  0  0  6  0   # T1.I12q
+  0       0                  0  0  6  0   # T1.I12m
+  0       0                  0  0  6  0   # T1.U1m
+  0       0                  0  0  6  0   # T1.U2m
+  0       0                  0  0  6  0   # T1.P1
+  0       0                  0  0  6  0   # T1.Q1
+  0       0                  0  0  6  0   # T1.P2
+  0       0                  0  0  6  0   # T1.Q2
+  0       0                  0  0  6  0   # T1.RL
+  0       0                  0  0  6  0   # T1.XL
+  0       0                  0  0  6  0   # T2_HV.U2d
+  0       0                  0  0  6  0   # T2_HV.U2q
+  0       0                  0  0  6  0   # T2_HV.I12d
+  0       0                  0  0  6  0   # T2_HV.I12q
+  0       0                  0  0  6  0   # T2_HV.I12m
+  0       0                  0  0  6  0   # T2_HV.U1m
+  0       0                  0  0  6  0   # T2_HV.U2m
+  0       0                  0  0  6  0   # T2_HV.P1
+  0       0                  0  0  6  0   # T2_HV.Q1
+  0       0                  0  0  6  0   # T2_HV.P2
+  0       0                  0  0  6  0   # T2_HV.Q2
+  0       0                  0  0  6  0   # T2_HV.RL
+  0       0                  0  0  6  0   # T2_HV.XL
+  0       0                  0  0  6  0   # T2_MV.I12d
+  0       0                  0  0  6  0   # T2_MV.I12q
+  0       0                  0  0  6  0   # T2_MV.I12m
+  0       0                  0  0  6  0   # T2_MV.U1m
+  0       0                  0  0  6  0   # T2_MV.U2m
+  0       0                  0  0  6  0   # T2_MV.P1
+  0       0                  0  0  6  0   # T2_MV.Q1
+  0       0                  0  0  6  0   # T2_MV.P2
+  0       0                  0  0  6  0   # T2_MV.Q2
+  0       0                  0  0  6  0   # T2_MV.RL
+  0       0                  0  0  6  0   # T2_MV.XL
+  0       0                  0  0  6  0   # T2_LV.U2d
+  0       0                  0  0  6  0   # T2_LV.U2q
+  0       0                  0  0  6  0   # T2_LV.I12d
+  0       0                  0  0  6  0   # T2_LV.I12q
+  0       0                  0  0  6  0   # T2_LV.I12m
+  0       0                  0  0  6  0   # T2_LV.U1m
+  0       0                  0  0  6  0   # T2_LV.U2m
+  0       0                  0  0  6  0   # T2_LV.P1
+  0       0                  0  0  6  0   # T2_LV.Q1
+  0       0                  0  0  6  0   # T2_LV.P2
+  0       0                  0  0  6  0   # T2_LV.Q2
+  0       0                  0  0  6  0   # T2_LV.RL
+  0       0                  0  0  6  0   # T2_LV.XL
+  0       0                  0  0  6  0   # T3.U2d
+  0       0                  0  0  6  0   # T3.U2q
+  0       0                  0  0  6  0   # T3.I12d
+  0       0                  0  0  6  0   # T3.I12q
+  0       0                  0  0  6  0   # T3.I12m
+  0       0                  0  0  6  0   # T3.U1m
+  0       0                  0  0  6  0   # T3.U2m
+  0       0                  0  0  6  0   # T3.P1
+  0       0                  0  0  6  0   # T3.Q1
+  0       0                  0  0  6  0   # T3.P2
+  0       0                  0  0  6  0   # T3.Q2
+  0       0                  0  0  6  0   # T3.RL
+  0       0                  0  0  6  0   # T3.XL
+  0       0                  0  0  6  0   # AT_HV.U2d
+  0       0                  0  0  6  0   # AT_HV.U2q
+  0       0                  0  0  6  0   # AT_HV.I12d
+  0       0                  0  0  6  0   # AT_HV.I12q
+  0       0                  0  0  6  0   # AT_HV.I12m
+  0       0                  0  0  6  0   # AT_HV.U1m
+  0       0                  0  0  6  0   # AT_HV.U2m
+  0       0                  0  0  6  0   # AT_HV.P1
+  0       0                  0  0  6  0   # AT_HV.Q1
+  0       0                  0  0  6  0   # AT_HV.P2
+  0       0                  0  0  6  0   # AT_HV.Q2
+  0       0                  0  0  6  0   # AT_HV.RL
+  0       0                  0  0  6  0   # AT_HV.XL
+  0       0                  0  0  6  0   # AT_MV.I12d
+  0       0                  0  0  6  0   # AT_MV.I12q
+  0       0                  0  0  6  0   # AT_MV.I12m
+  0       0                  0  0  6  0   # AT_MV.U1m
+  0       0                  0  0  6  0   # AT_MV.U2m
+  0       0                  0  0  6  0   # AT_MV.P1
+  0       0                  0  0  6  0   # AT_MV.Q1
+  0       0                  0  0  6  0   # AT_MV.P2
+  0       0                  0  0  6  0   # AT_MV.Q2
+  0       0                  0  0  6  0   # AT_MV.RL
+  0       0                  0  0  6  0   # AT_MV.XL
+  0       0                  0  0  6  0   # AT_LV.U2d
+  0       0                  0  0  6  0   # AT_LV.U2q
+  0       0                  0  0  6  0   # AT_LV.I12d
+  0       0                  0  0  6  0   # AT_LV.I12q
+  0       0                  0  0  6  0   # AT_LV.I12m
+  0       0                  0  0  6  0   # AT_LV.U1m
+  0       0                  0  0  6  0   # AT_LV.U2m
+  0       0                  0  0  6  0   # AT_LV.P1
+  0       0                  0  0  6  0   # AT_LV.Q1
+  0       0                  0  0  6  0   # AT_LV.P2
+  0       0                  0  0  6  0   # AT_LV.Q2
+  0       0                  0  0  6  0   # AT_LV.RL
+  0       0                  0  0  6  0   # AT_LV.XL
+  0       0                  0  0  6  0   # L1.U1d
+  0       0                  0  0  6  0   # L1.U1q
+  0       0                  0  0  6  0   # L1.U2d
+  0       0                  0  0  6  0   # L1.U2q
+  0       0                  0  0  6  0   # L1.I12d
+  0       0                  0  0  6  0   # L1.I12q
+  0       0                  0  0  6  0   # L1.I12m
+  0       0                  0  0  6  0   # L1.U1m
+  0       0                  0  0  6  0   # L1.U2m
+  0       0                  0  0  6  0   # L1.I1d
+  0       0                  0  0  6  0   # L1.I1q
+  0       0                  0  0  6  0   # L1.I2d
+  0       0                  0  0  6  0   # L1.I2q
+  0       0                  0  0  6  0   # L1.Idc1
+  0       0                  0  0  6  0   # L1.Iqc1
+  0       0                  0  0  6  0   # L1.Idc2
+  0       0                  0  0  6  0   # L1.Iqc2
+  0       0                  0  0  6  0   # L1.DU1
+  0       0                  0  0  6  0   # L1.DU2
+  0       0                  0  0  6  0   # L1.Bnn
+  0       0                  0  0  6  0   # L1.P1
+  0       0                  0  0  6  0   # L1.Q1
+  0       0                  0  0  6  0   # L1.P2
+  0       0                  0  0  6  0   # L1.Q2
+  0       0                  0  0  6  0   # L1.RL
+  0       0                  0  0  6  0   # L1.XL
+  0       0                  0  0  6  0   # L2.U1d
+  0       0                  0  0  6  0   # L2.U1q
+  0       0                  0  0  6  0   # L2.U2d
+  0       0                  0  0  6  0   # L2.U2q
+  0       0                  0  0  6  0   # L2.I12d
+  0       0                  0  0  6  0   # L2.I12q
+  0       0                  0  0  6  0   # L2.I12m
+  0       0                  0  0  6  0   # L2.U1m
+  0       0                  0  0  6  0   # L2.U2m
+  0       0                  0  0  6  0   # L2.I1d
+  0       0                  0  0  6  0   # L2.I1q
+  0       0                  0  0  6  0   # L2.I2d
+  0       0                  0  0  6  0   # L2.I2q
+  0       0                  0  0  6  0   # L2.Idc1
+  0       0                  0  0  6  0   # L2.Iqc1
+  0       0                  0  0  6  0   # L2.Idc2
+  0       0                  0  0  6  0   # L2.Iqc2
+  0       0                  0  0  6  0   # L2.DU1
+  0       0                  0  0  6  0   # L2.DU2
+  0       0                  0  0  6  0   # L2.Bnn
+  0       0                  0  0  6  0   # L2.P1
+  0       0                  0  0  6  0   # L2.Q1
+  0       0                  0  0  6  0   # L2.P2
+  0       0                  0  0  6  0   # L2.Q2
+  0       0                  0  0  6  0   # L2.RL
+  0       0                  0  0  6  0   # L2.XL
+  0       0                  0  0  6  0   # L3.U2d
+  0       0                  0  0  6  0   # L3.U2q
+  0       0                  0  0  6  0   # L3.I12d
+  0       0                  0  0  6  0   # L3.I12q
+  0       0                  0  0  6  0   # L3.I12m
+  0       0                  0  0  6  0   # L3.U1m
+  0       0                  0  0  6  0   # L3.U2m
+  0       0                  0  0  6  0   # L3.I1d
+  0       0                  0  0  6  0   # L3.I1q
+  0       0                  0  0  6  0   # L3.I2d
+  0       0                  0  0  6  0   # L3.I2q
+  0       0                  0  0  6  0   # L3.Idc1
+  0       0                  0  0  6  0   # L3.Iqc1
+  0       0                  0  0  6  0   # L3.Idc2
+  0       0                  0  0  6  0   # L3.Iqc2
+  0       0                  0  0  6  0   # L3.DU1
+  0       0                  0  0  6  0   # L3.DU2
+  0       0                  0  0  6  0   # L3.Bnn
+  0       0                  0  0  6  0   # L3.P1
+  0       0                  0  0  6  0   # L3.Q1
+  0       0                  0  0  6  0   # L3.P2
+  0       0                  0  0  6  0   # L3.Q2
+  0       0                  0  0  6  0   # L3.RL
+  0       0                  0  0  6  0   # L3.XL
+  0       0                  0  0  6  0   # L4.U2d
+  0       0                  0  0  6  0   # L4.U2q
+  0       0                  0  0  6  0   # L4.I12d
+  0       0                  0  0  6  0   # L4.I12q
+  0       0                  0  0  6  0   # L4.I12m
+  0       0                  0  0  6  0   # L4.U1m
+  0       0                  0  0  6  0   # L4.U2m
+  0       0                  0  0  6  0   # L4.I1d
+  0       0                  0  0  6  0   # L4.I1q
+  0       0                  0  0  6  0   # L4.I2d
+  0       0                  0  0  6  0   # L4.I2q
+  0       0                  0  0  6  0   # L4.Idc1
+  0       0                  0  0  6  0   # L4.Iqc1
+  0       0                  0  0  6  0   # L4.Idc2
+  0       0                  0  0  6  0   # L4.Iqc2
+  0       0                  0  0  6  0   # L4.DU1
+  0       0                  0  0  6  0   # L4.DU2
+  0       0                  0  0  6  0   # L4.Bnn
+  0       0                  0  0  6  0   # L4.P1
+  0       0                  0  0  6  0   # L4.Q1
+  0       0                  0  0  6  0   # L4.P2
+  0       0                  0  0  6  0   # L4.Q2
+  0       0                  0  0  6  0   # L4.RL
+  0       0                  0  0  6  0   # L4.XL
+  0       0                  0  0  6  0   # L5.I12d
+  0       0                  0  0  6  0   # L5.I12q
+  0       0                  0  0  6  0   # L5.I12m
+  0       0                  0  0  6  0   # L5.U1m
+  0       0                  0  0  6  0   # L5.U2m
+  0       0                  0  0  6  0   # L5.I1d
+  0       0                  0  0  6  0   # L5.I1q
+  0       0                  0  0  6  0   # L5.I2d
+  0       0                  0  0  6  0   # L5.I2q
+  0       0                  0  0  6  0   # L5.Idc1
+  0       0                  0  0  6  0   # L5.Iqc1
+  0       0                  0  0  6  0   # L5.Idc2
+  0       0                  0  0  6  0   # L5.Iqc2
+  0       0                  0  0  6  0   # L5.DU1
+  0       0                  0  0  6  0   # L5.DU2
+  0       0                  0  0  6  0   # L5.Bnn
+  0       0                  0  0  6  0   # L5.P1
+  0       0                  0  0  6  0   # L5.Q1
+  0       0                  0  0  6  0   # L5.P2
+  0       0                  0  0  6  0   # L5.Q2
+  0       0                  0  0  6  0   # L5.RL
+  0       0                  0  0  6  0   # L5.XL
+  0       0                  0  0  6  0   # L6.U1d
+  0       0                  0  0  6  0   # L6.U1q
+  0       0                  0  0  6  0   # L6.I12d
+  0       0                  0  0  6  0   # L6.I12q
+  0       0                  0  0  6  0   # L6.I12m
+  0       0                  0  0  6  0   # L6.U1m
+  0       0                  0  0  6  0   # L6.U2m
+  0       0                  0  0  6  0   # L6.I1d
+  0       0                  0  0  6  0   # L6.I1q
+  0       0                  0  0  6  0   # L6.I2d
+  0       0                  0  0  6  0   # L6.I2q
+  0       0                  0  0  6  0   # L6.Idc1
+  0       0                  0  0  6  0   # L6.Iqc1
+  0       0                  0  0  6  0   # L6.Idc2
+  0       0                  0  0  6  0   # L6.Iqc2
+  0       0                  0  0  6  0   # L6.DU1
+  0       0                  0  0  6  0   # L6.DU2
+  0       0                  0  0  6  0   # L6.Bnn
+  0       0                  0  0  6  0   # L6.P1
+  0       0                  0  0  6  0   # L6.Q1
+  0       0                  0  0  6  0   # L6.P2
+  0       0                  0  0  6  0   # L6.Q2
+  0       0                  0  0  6  0   # L6.RL
+  0       0                  0  0  6  0   # L6.XL
+  0       0                  0  0  6  0   # N1.Iqn
+  0       0                  0  0  6  0   # N1.Idn
+  0       0                  0  0  6  0   # N1.Pn
+  0       0                  0  0  6  0   # N1.Qn
+  0       0                  0  0  6  0   # N1.R0
+  0       0                  0  0  6  0   # N1.X0
+  0       0                  0  0  6  0   # N1.Gnn
+  0       0                  0  0  6  0   # N1.Bnn
+  0       0                  0  0  6  0   # N2.Iqn
+  0       0                  0  0  6  0   # N2.Idn
+  0       0                  0  0  6  0   # N2.Pn
+  0       0                  0  0  6  0   # N2.Qn
+  0       0                  0  0  6  0   # N2.R0
+  0       0                  0  0  6  0   # N2.X0
+  0       0                  0  0  6  0   # N2.Gnn
+  0       0                  0  0  6  0   # N2.Bnn
+  0       0                  0  0  6  0   # N3.Iqn
+  0       0                  0  0  6  0   # N3.Idn
+  0       0                  0  0  6  0   # N3.Pn
+  0       0                  0  0  6  0   # N3.Qn
+  0       0                  0  0  6  0   # N3.R0
+  0       0                  0  0  6  0   # N3.X0
+  0       0                  0  0  6  0   # N3.Gnn
+  0       0                  0  0  6  0   # N3.Bnn
+  0       0                  0  0  6  0   # N4.Iqn
+  0       0                  0  0  6  0   # N4.Idn
+  0       0                  0  0  6  0   # N4.Pn
+  0       0                  0  0  6  0   # N4.Qn
+  0       0                  0  0  6  0   # N4.R0
+  0       0                  0  0  6  0   # N4.X0
+  0       0                  0  0  6  0   # N4.Gnn
+  0       0                  0  0  6  0   # N4.Bnn
+  0       0                  0  0  6  0   # KZ01.id
+  0       0                  0  0  6  0   # KZ01.iq
+  0       0                  0  0  6  0   # KZ02.id
+  0       0                  0  0  6  0   # KZ02.iq
+  0       0                  0  0  6  0   # KZ03.id
+  0       0                  0  0  6  0   # KZ03.iq
+  0       0                  0  0  6  0   # KZ04.id
+  0       0                  0  0  6  0   # KZ04.iq
+  0       0                  0  0  6  0   # KZ05.id
+  0       0                  0  0  6  0   # KZ05.iq
+  0       0                  0  0  6  0   # KZ06.id
+  0       0                  0  0  6  0   # KZ06.iq
+  0       0                  0  0  6  0   # KZ07.id
+  0       0                  0  0  6  0   # KZ07.iq
+  0       0                  0  0  6  0   # KZ08.id
+  0       0                  0  0  6  0   # KZ08.iq
+  0       0                  0  0  6  0   # KZ09.id
+  0       0                  0  0  6  0   # KZ09.iq
+  0       0                  0  0  6  0   # KZ10.id
+  0       0                  0  0  6  0   # KZ10.iq
+  0       0                  0  0  6  0   # KZ11.id
+  0       0                  0  0  6  0   # KZ11.iq
+  0       0                  0  0  6  0   # KZ12.id
+  0       0                  0  0  6  0   # KZ12.iq
+  0       0                  0  0  6  0   # KZ13.id
+  0       0                  0  0  6  0   # KZ13.iq
+  0       0                  0  0  6  0   # KZ14.id
+  0       0                  0  0  6  0   # KZ14.iq
+  0       0                  0  0  6  0   # KZ15.id
+  0       0                  0  0  6  0   # KZ15.iq
+  0       0                  0  0  6  0   # KZ16.id
+  0       0                  0  0  6  0   # KZ16.iq
+
+
+# Matrix with 6 columns defining the initial value calculation
+# (columns 5 and 6 are not utilized for the calculation but are
+#  reported by dymosim via dymosim -i for user convenience):
+#
+# column 1: Type of initial value
+#           = -2: special case: for continuing simulation (column 2 = value)
+#           = -1: fixed value (column 2 = fixed value)
+#           =  0: free value, i.e., no restriction (column 2 = initial value)
+#           >  0: desired value (column 1 = weight for optimization
+#                                column 2 = desired value)
+#                 use weight=1, since automatic scaling usually
+#                 leads to equally weighted terms
+# column 2: fixed, free or desired value according to column 1.
+# column 3: Minimum value (ignored, if Minimum >= Maximum).
+# column 4: Maximum value (ignored, if Minimum >= Maximum).
+#           Minimum and maximum values are used for scaling purposes
+#           both in the simulator and for the initial value calculation.
+#           Furthermore, they restrict the search range in initial
+#           value calculation.
+# column 5: Category of variable.
+#           = 1: parameter.
+#           = 2: state.
+#           = 3: state derivative.
+#           = 4: output.
+#           = 5: input.
+#           = 6: auxiliary variable.
+# column 6: Data type of variable.
+#           = 0: real.
+#           = 1: boolean.
+#           = 2: integer.
+#
+# Initial values are calculated according to the following procedure:
+#
+# - If parameters, states and inputs are FIXED, and other variables
+#   are FREE, no special action takes place (default setting).
+#
+# - If there are only FIXED and FREE variables and the number of
+#   FREE parameters, states and inputs is IDENTICAL to the number of
+#   FIXED state derivatives, outputs and auxiliary variables, a non-linear
+#   equation is solved to determine a consistent set of initial conditions.
+#
+# - In all other cases the following optimization problem is solved:
+#      min( sum( weight(i)*( (value(i) - DESIRED(i))/scale(i) )^2 ) )
+#   under the constraint that the differential equation is fulfilled
+#   at the initial time. In most cases weight(i)=1 is sufficient, due
+#   to the automatic scaling (if DESIRED(i) is not close to zero,
+#   scale(i) = DESIRED(i). Otherwise, the scaling is based on the
+#   minimum and maximum values given in column 3 and 4. If these values
+#   are zero, scale(i)=1 is used).
+#
+char initialDescription(1019,57)
+
+
+
+
+
+
+Продольное индуктивное сопротивление
+Поперечное индуктивное сопротивление
+Индуктивное сопротивление рассеяния
+Переходное продольное индуктивное сопротивление
+Сверхпереходное продольное индуктивное сопротивление
+Сверхпереходное поперечное индуктивное сопротивление
+Активное сопротивление обмотки возбуждения
+Активное сопротивление ДК в продольной оси
+Активное сопротивление ДК в поперечной оси
+Механическая инерционная постоянная
+Коэффициент статизма регулятора турбины
+Постоянная времени сервомотора
+
+
+
+
+
+
+Numerator coefficients of transfer function.
+Numerator coefficients of transfer function.
+Numerator coefficients of transfer function.
+Numerator coefficients of transfer function.
+
+
+
+
+
+Продольное индуктивное сопротивление
+Поперечное индуктивное сопротивление
+Индуктивное сопротивление рассеяния
+Переходное продольное индуктивное сопротивление
+Сверхпереходное продольное индуктивное сопротивление
+Сверхпереходное поперечное индуктивное сопротивление
+Активное сопротивление обмотки возбуждения
+Активное сопротивление ДК в продольной оси
+Активное сопротивление ДК в поперечной оси
+Механическая инерционная постоянная
+Коэффициент статизма регулятора турбины
+Постоянная времени сервомотора
+
+
+
+
+
+
+Numerator coefficients of transfer function.
+Numerator coefficients of transfer function.
+Numerator coefficients of transfer function.
+Numerator coefficients of transfer function.
+
+
+
+
+
+Продольное индуктивное сопротивление
+Поперечное индуктивное сопротивление
+Индуктивное сопротивление рассеяния
+Переходное продольное индуктивное сопротивление
+Сверхпереходное продольное индуктивное сопротивление
+Сверхпереходное поперечное индуктивное сопротивление
+Активное сопротивление обмотки возбуждения
+Активное сопротивление ДК в продольной оси
+Активное сопротивление ДК в поперечной оси
+Механическая инерционная постоянная
+Коэффициент статизма регулятора турбины
+Постоянная времени сервомотора
+
+
+
+
+
+
+Numerator coefficients of transfer function.
+Numerator coefficients of transfer function.
+Numerator coefficients of transfer function.
+Numerator coefficients of transfer function.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Активная составляющая нагрузки
+Реактивная составляющая нагрузки
+
+
+Активная составляющая нагрузки
+Реактивная составляющая нагрузки
+
+
+Активная составляющая нагрузки
+Реактивная составляющая нагрузки
+
+
+Активная составляющая нагрузки
+Реактивная составляющая нагрузки
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+State of transfer function from controller canonical form
+State of transfer function from controller canonical form
+State of transfer function from controller canonical form
+State of transfer function from controller canonical form
+State of transfer function from controller canonical form
+State of transfer function from controller canonical form
+State of transfer function from controller canonical form
+State of transfer function from controller canonical form
+
+
+
+
+
+
+State of transfer function from controller canonical form
+State of transfer function from controller canonical form
+State of transfer function from controller canonical form
+State of transfer function from controller canonical form
+State of transfer function from controller canonical form
+State of transfer function from controller canonical form
+State of transfer function from controller canonical form
+State of transfer function from controller canonical form
+
+
+
+
+
+
+State of transfer function from controller canonical form
+State of transfer function from controller canonical form
+State of transfer function from controller canonical form
+State of transfer function from controller canonical form
+State of transfer function from controller canonical form
+State of transfer function from controller canonical form
+State of transfer function from controller canonical form
+State of transfer function from controller canonical form
+
+
+
+
+
+
+
+
+
+State of transfer function from controller canonical form
+State of transfer function from controller canonical form
+State of transfer function from controller canonical form
+State of transfer function from controller canonical form
+State of transfer function from controller canonical form
+State of transfer function from controller canonical form
+State of transfer function from controller canonical form
+State of transfer function from controller canonical form
+
+
+
+
+
+
+State of transfer function from controller canonical form
+State of transfer function from controller canonical form
+State of transfer function from controller canonical form
+State of transfer function from controller canonical form
+State of transfer function from controller canonical form
+State of transfer function from controller canonical form
+State of transfer function from controller canonical form
+State of transfer function from controller canonical form
+
+
+
+
+
+
+State of transfer function from controller canonical form
+State of transfer function from controller canonical form
+State of transfer function from controller canonical form
+State of transfer function from controller canonical form
+State of transfer function from controller canonical form
+State of transfer function from controller canonical form
+State of transfer function from controller canonical form
+State of transfer function from controller canonical form
+
+
+
+Индуктивное сопротивление трансформатора
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Numerator coefficients of transfer function.
+Denominator coefficients of transfer function.
+Denominator coefficients of transfer function.
+Size of Denominator of transfer function.
+Size of Numerator of transfer function.
+
+
+
+Numerator coefficients of transfer function.
+Numerator coefficients of transfer function.
+Denominator coefficients of transfer function.
+Denominator coefficients of transfer function.
+Size of Denominator of transfer function.
+Size of Numerator of transfer function.
+
+
+Denominator coefficients of transfer function.
+Denominator coefficients of transfer function.
+Size of Denominator of transfer function.
+Size of Numerator of transfer function.
+
+
+
+Denominator coefficients of transfer function.
+Denominator coefficients of transfer function.
+Size of Denominator of transfer function.
+Size of Numerator of transfer function.
+
+
+
+Numerator coefficients of transfer function.
+Numerator coefficients of transfer function.
+Denominator coefficients of transfer function.
+Denominator coefficients of transfer function.
+Size of Denominator of transfer function.
+Size of Numerator of transfer function.
+
+
+
+Numerator coefficients of transfer function.
+Numerator coefficients of transfer function.
+Denominator coefficients of transfer function.
+Denominator coefficients of transfer function.
+Size of Denominator of transfer function.
+Size of Numerator of transfer function.
+
+
+Numerator coefficients of transfer function.
+Numerator coefficients of transfer function.
+Denominator coefficients of transfer function.
+Denominator coefficients of transfer function.
+Size of Denominator of transfer function.
+Size of Numerator of transfer function.
+
+
+
+Denominator coefficients of transfer function.
+Denominator coefficients of transfer function.
+Size of Denominator of transfer function.
+Size of Numerator of transfer function.
+
+
+Индуктивное сопротивление трансформатора
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Numerator coefficients of transfer function.
+Denominator coefficients of transfer function.
+Denominator coefficients of transfer function.
+Size of Denominator of transfer function.
+Size of Numerator of transfer function.
+
+
+
+Numerator coefficients of transfer function.
+Numerator coefficients of transfer function.
+Denominator coefficients of transfer function.
+Denominator coefficients of transfer function.
+Size of Denominator of transfer function.
+Size of Numerator of transfer function.
+
+
+Denominator coefficients of transfer function.
+Denominator coefficients of transfer function.
+Size of Denominator of transfer function.
+Size of Numerator of transfer function.
+
+
+
+Denominator coefficients of transfer function.
+Denominator coefficients of transfer function.
+Size of Denominator of transfer function.
+Size of Numerator of transfer function.
+
+
+
+Numerator coefficients of transfer function.
+Numerator coefficients of transfer function.
+Denominator coefficients of transfer function.
+Denominator coefficients of transfer function.
+Size of Denominator of transfer function.
+Size of Numerator of transfer function.
+
+
+
+Numerator coefficients of transfer function.
+Numerator coefficients of transfer function.
+Denominator coefficients of transfer function.
+Denominator coefficients of transfer function.
+Size of Denominator of transfer function.
+Size of Numerator of transfer function.
+
+
+Numerator coefficients of transfer function.
+Numerator coefficients of transfer function.
+Denominator coefficients of transfer function.
+Denominator coefficients of transfer function.
+Size of Denominator of transfer function.
+Size of Numerator of transfer function.
+
+
+
+Denominator coefficients of transfer function.
+Denominator coefficients of transfer function.
+Size of Denominator of transfer function.
+Size of Numerator of transfer function.
+
+
+Индуктивное сопротивление трансформатора
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Numerator coefficients of transfer function.
+Denominator coefficients of transfer function.
+Denominator coefficients of transfer function.
+Size of Denominator of transfer function.
+Size of Numerator of transfer function.
+
+
+
+Numerator coefficients of transfer function.
+Numerator coefficients of transfer function.
+Denominator coefficients of transfer function.
+Denominator coefficients of transfer function.
+Size of Denominator of transfer function.
+Size of Numerator of transfer function.
+
+
+Denominator coefficients of transfer function.
+Denominator coefficients of transfer function.
+Size of Denominator of transfer function.
+Size of Numerator of transfer function.
+
+
+
+Denominator coefficients of transfer function.
+Denominator coefficients of transfer function.
+Size of Denominator of transfer function.
+Size of Numerator of transfer function.
+
+
+
+Numerator coefficients of transfer function.
+Numerator coefficients of transfer function.
+Denominator coefficients of transfer function.
+Denominator coefficients of transfer function.
+Size of Denominator of transfer function.
+Size of Numerator of transfer function.
+
+
+
+Numerator coefficients of transfer function.
+Numerator coefficients of transfer function.
+Denominator coefficients of transfer function.
+Denominator coefficients of transfer function.
+Size of Denominator of transfer function.
+Size of Numerator of transfer function.
+
+
+Numerator coefficients of transfer function.
+Numerator coefficients of transfer function.
+Denominator coefficients of transfer function.
+Denominator coefficients of transfer function.
+Size of Denominator of transfer function.
+Size of Numerator of transfer function.
+
+
+
+Denominator coefficients of transfer function.
+Denominator coefficients of transfer function.
+Size of Denominator of transfer function.
+Size of Numerator of transfer function.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

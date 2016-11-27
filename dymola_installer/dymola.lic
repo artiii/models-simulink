@@ -1,0 +1,135 @@
+User Gustaf Olsson
+
+Site
+Dept. Industrial Electrical Eng. and Automation
+Lund Institute of Technology
+Sweden
+End
+
+Text
+
+  LICENSE AGREEMENT FOR DYMOLA
+
+  Dynasim AB hereby grants to Licensee a non-exclusive, perpetual license
+  to use Dymola ("Program") with specified options provided the following 
+  conditions are fulfilled.
+
+
+  CONDITIONS
+
+      The names of the licensed site, computer platform, number of 
+      simultaneous users, and a person responsible for license conditions 
+      not being violated are included in a license file that is partly 
+      presented on the screen during startup of the Program. 
+
+  1.  The number of simultaneously executing copies of the Program may
+      not exceed the number of licenses acquired, except that, if explicitly 
+      stated, students of a registered teacher may also run copies of the
+      Program. 
+
+  2.  The person responsible for the license shall take appropriate
+      actions with persons having access to the Program in order that
+      license conditions will be satisfied.
+
+  3.  The Program may only be used by a user as long as 
+      he/she is normally working or studying at the licensed site.
+
+  4.  Student users associated with a registered teacher must be 
+      informed that they may only use the Program as long as they 
+      are students of that teacher. 
+
+  5.  The Program with a "university license" may not be used for
+      commercial purposes.
+
+  6.  The license is not transferable to other sites or computer platforms.
+
+  7.  The documentation provided with the Program may not be copied.
+
+  8.  The Program and associated files on the distribution media 
+      may only be copied for the purpose of installation and backup 
+      and specifically may not be copied and made available to other 
+      persons outside the licensed site.
+
+  9.  Reasonable best efforts must be used to protect the Program 
+      and material from unauthorized reproduction.
+
+  10. The executable files and license file may not be modified.
+
+  11. The Program may not be reverse engineered.
+
+  12. The license agreement is terminated if any of these conditions 
+      are not satisfied or if payment is not done as requested.
+
+
+  UPDATES
+
+  New releases of the Program will be offered to licensed users 
+  at heavily discounted prices.
+
+
+  SUPPORT
+
+  Dynasim AB will give normal software industry support in the use 
+  of the Program during one year after purchase.
+
+
+  TERMINATION
+
+  If the license agreement is terminated, all Program files, 
+  related files and documentation shall be deleted or destroyed 
+  and written certification of their destruction shall promptly 
+  be provided. 
+
+
+  LIMITED WARRANTY
+
+  Dynasim AB only warrants that the Program will perform 
+  substantially in accordance with the User's Manual and
+  any sales documents applicable at time of sale, when used as 
+  directed. This warranty is valid for 6 months from delivery. If 
+  Dynasim can not replace incorrect documentation or provide a 
+  corrected Program, Dynasim will refund the license fee for the 
+  Program. In such a case, the license agreement is terminated.
+
+  Except as otherwise provided herein, Dynasim makes no other 
+  warranties, express or implied, concerning the Program, including
+  all warranties of merchantability and fitness for any particular 
+  purpose.
+
+  In no event will Dynasim be liable for consequential damages of 
+  any kind whatever.
+
+  The Program is owned by Dynasim and in part by its supplier. 
+  Dynasim warrants that it has the right to grant licenses of
+  the Program.
+
+
+  INDEMNIFICATION
+
+  In the event of a copyright or patent infrigement claim, Dynasim may
+  at its own expense defend such claim or may procure for Licensee the 
+  right to continue using all or part of the Program so that it becomes 
+  non-infringing.
+
+  Dynasim will indemnify Licensee from direct expenditures incurred by
+  Licensee in defending against a copyright or patent infringement claim
+  provided that Dynasim is promptly notified in writing by Licensee that 
+  such action is threatened or has been brought, and Dynasim receives the
+  cooperation and assitance of Licensee.
+ 
+
+  GENERAL PROVISONS
+
+  This agreement shall be governed by the laws of Sweden.
+
+  This agreement contains the entire understanding of the parties and
+  may be modified or amended only by written instrument signed by
+  both parties.
+End
+
+Version		4.0
+LicenseDate	1999-08-19
+Disable		HighCapacity
+Disable		Animation
+License		229
+= 37795837

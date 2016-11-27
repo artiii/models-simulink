@@ -1,0 +1,20 @@
+ 
+Compiling the model with GCC. 
+April 22, 2016 21:48:21
+gcc -c -O1 -mpentium -march=pentium -ffast-math -DDYMOSIM -I. -IC:\wp\Dymola\source dsmodel.c
+C:\wp\Dymola\source\dsblock1.c: In function `equations_':
+C:\wp\Dymola\source\dsblock1.c:165: warning: This file contains more `{'s than `}'s.
+C:\wp\Dymola\source\dsblock2.c: In function `dsblock_':
+C:\wp\Dymola\source\dsblock2.c:81: warning: This file contains more `{'s than `}'s.
+C:\wp\Dymola\source\dsblock3.c:41: warning: This file contains more `{'s than `}'s.
+C:\wp\Dymola\source\dsblock4.c: In function `declare_':
+C:\wp\Dymola\source\dsblock4.c:77: warning: This file contains more `}'s than `{'s.
+C:\wp\Dymola\source\dsblock5.c: At top level:
+C:\wp\Dymola\source\dsblock5.c:171: warning: This file contains more `}'s than `{'s.
+ 
+Linking the model to Dymosim. 
+April 22, 2016 21:48:23
+gcc -s -o dymosim.exe dymosim.o dsmodel.o -LC:\wp\Dymola\bin\lib\egcs -lds -lm
+ 
+Successful generation of Dymosim. 
+April 22, 2016 21:48:23
